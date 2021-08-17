@@ -1,25 +1,21 @@
-import logo from './logo.svg';
-import './App.css';
+import Container from "@material-ui/core/Container"
+import "./App.css"
+import NavBar from "./components/NavBar"
+import Footer from "./components/Footer"
+import AllApplicants from "./components/AllApplicants"
 
-function App() {
+export default function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <>
+      <NavBar />
+      {/* <Container
+        maxWidth="md"
+        style={{ minHeight: "70vh", paddingTop: "20px" }}
+      >
+        Home Page
+      </Container> */}
+      <AllApplicants />
+      <Footer />
+    </>
+  )
 }
-
-export default App;
