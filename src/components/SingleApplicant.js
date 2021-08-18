@@ -1,8 +1,7 @@
-import Grid from "@material-ui/core/Grid"
-import Paper from "@material-ui/core/Paper"
-import Typography from "@material-ui/core/Typography"
+import {Grid, Box, Paper, Typography} from "@material-ui/core"
+import Rating from "@material-ui/lab/Rating"
+import { useState } from "react"
 import { makeStyles } from "@material-ui/core/styles"
-import headshot from "../static//headshot-2021-cropped.jpg"
 import SingleAppRating from "./SingleAppRating"
 import SingleAppInfo from "./SingleAppInfo"
 
@@ -13,12 +12,15 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(2),
     textAlign: "center",
-    color: theme.palette.text.secondary,
+    color: theme.palette.text.primary,
   },
 }))
 
 export default function SingleApplicant(props) {
-  const { first_name, last_name, email, photo_url, position } = props.value
+  const { first_name, last_name, email, photo_url, position, rating } =
+    props.value
+
+  // const [value, setValue] = useState(5)
   const classes = useStyles()
 
   return (
@@ -29,11 +31,19 @@ export default function SingleApplicant(props) {
             <img
               src={photo_url}
               alt={`${first_name} ${last_name}`}
-              width="200"
+              width="150"
               height="auto"
               style={{ borderRadius: "50%", maxWidth: "100%" }}
             />
-            <SingleAppRating />
+            <Box component="fieldset" mb={3} borderColor="transparent">
+              <Rating
+                name="simple-controlled"
+                value={rating}
+                // onChange={(event, newValue) => {
+                //   setValue(newValue)
+                // }}
+              />
+            </Box>
           </Paper>
         </Grid>
         <Grid item xs={12} md={8}>

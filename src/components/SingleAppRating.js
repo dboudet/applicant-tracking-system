@@ -4,10 +4,9 @@ import Typography from "@material-ui/core/Typography"
 import Box from "@material-ui/core/Box"
 
 export default function SingleAppRating() {
-  const [value, setValue] = useState(4)
+  const [value, setValue] = useState(5)
 
   return (
-    <div>
       <Box component="fieldset" mb={3} borderColor="transparent">
         <Typography component="legend">Rating</Typography>
         <Rating
@@ -18,6 +17,5 @@ export default function SingleAppRating() {
           }}
         />
       </Box>
-    </div>
   )
 }

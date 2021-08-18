@@ -1,12 +1,11 @@
 import { Container } from "@material-ui/core"
 import { useState, useEffect } from "react"
-import SingleApplicant from "./SingleApplicant"
 
-export default function AllApplicants() {
-  const [applicants, setApplicants] = useState([])
+export default function ViewApplicant() {
+  const [applicant, setApplicant] = useState({})
 
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_ENDPOINT}/ats/applicants`)
+    fetch(`${process.env.REACT_APP_API_ENDPOINT}/ats/applicants/:applicantId`)
       .then((response) => response.json())
       .then((data) => {
         setApplicants(data)
