@@ -1,16 +1,15 @@
-import {Grid, Box, Paper, Typography} from "@material-ui/core"
+import { Grid, Box, Paper, Typography } from "@material-ui/core"
 import Rating from "@material-ui/lab/Rating"
 import { useState } from "react"
 import { makeStyles } from "@material-ui/core/styles"
-import SingleAppRating from "./SingleAppRating"
-import SingleAppInfo from "./SingleAppInfo"
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
+    padding: theme.spacing(2),
   },
   paper: {
-    padding: theme.spacing(2),
+    padding: theme.spacing(3),
     textAlign: "center",
     color: theme.palette.text.primary,
   },
@@ -25,9 +24,9 @@ export default function SingleApplicant(props) {
 
   return (
     <div className={classes.root}>
-      <Grid container spacing={3}>
-        <Grid item xs={12} md={4}>
-          <Paper className={classes.paper}>
+      <Paper className={classes.paper}>
+        <Grid container spacing={3}>
+          <Grid item xs={12} md={4}>
             <img
               src={photo_url}
               alt={`${first_name} ${last_name}`}
@@ -44,17 +43,15 @@ export default function SingleApplicant(props) {
                 // }}
               />
             </Box>
-          </Paper>
-        </Grid>
-        <Grid item xs={12} md={8}>
-          <Paper className={classes.paper}>
+          </Grid>
+          <Grid item xs={12} md={8}>
             <Typography variant="h3">{`${first_name} ${last_name}`}</Typography>
             <Typography variant="body1">{email}</Typography>
             <Typography variant="body1">{position}</Typography>
             <Typography variant="body2">Notes</Typography>
-          </Paper>
+          </Grid>
         </Grid>
-      </Grid>
+      </Paper>
     </div>
   )
 }

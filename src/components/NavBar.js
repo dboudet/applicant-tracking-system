@@ -1,18 +1,23 @@
 import { useState } from "react"
 import { alpha, makeStyles } from "@material-ui/core/styles"
-import AppBar from "@material-ui/core/AppBar"
-import Toolbar from "@material-ui/core/Toolbar"
-import IconButton from "@material-ui/core/IconButton"
-import Typography from "@material-ui/core/Typography"
-import InputBase from "@material-ui/core/InputBase"
-import MenuItem from "@material-ui/core/MenuItem"
-import Menu from "@material-ui/core/Menu"
-import MenuIcon from "@material-ui/icons/Menu"
+import {
+  CssBaseline,
+  AppBar,
+  Toolbar,
+  IconButton,
+  Typography,
+  InputBase,
+  MenuItem,
+  Menu,
+} from "@material-ui/core"
+import MoreIcon from "@material-ui/icons/MoreVert"
 import SearchIcon from "@material-ui/icons/Search"
 import AccountCircle from "@material-ui/icons/AccountCircle"
-import MoreIcon from "@material-ui/icons/MoreVert"
 
 const useStyles = makeStyles((theme) => ({
+  appBar: {
+    zIndex: theme.zIndex.drawer + 1,
+  },
   grow: {
     flexGrow: 1,
   },
@@ -144,16 +149,17 @@ export default function NavBar() {
 
   return (
     <div className={classes.grow}>
-      <AppBar position="static">
+      <CssBaseline />
+      <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
-          <IconButton
+          {/* <IconButton
             edge="start"
             className={classes.menuButton}
             color="inherit"
             aria-label="open drawer"
           >
             <MenuIcon />
-          </IconButton>
+          </IconButton> */}
           <Typography className={classes.title} variant="h6" noWrap>
             Applicant Tracking System
           </Typography>
@@ -198,6 +204,7 @@ export default function NavBar() {
       </AppBar>
       {renderMobileMenu}
       {renderMenu}
+      <div className={classes.offset} />
     </div>
   )
 }

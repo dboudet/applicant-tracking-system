@@ -1,34 +1,17 @@
 import { useState, useEffect } from "react"
-import { Avatar, Container } from "@material-ui/core"
+import { Container } from "@material-ui/core"
 import { DataGrid } from "@material-ui/data-grid"
-import SingleAppRating from "./SingleAppRating"
-let imageUrlForTable = ""
 
 const columns = [
   {
-    field: (
-      <Avatar
-        alt="photo"
-        src={imageUrlForTable}
-      />
-    ),
-    headerName: "",
-    width: 50,
-  },
-  {
-    field: "first_name",
-    headerName: "First name",
-    width: 120,
-  },
-  {
-    field: "first_name",
-    headerName: "First name",
-    width: 120,
-  },
-  {
-    field: "last_name",
-    headerName: "Last name",
-    width: 120,
+    field: "full_name",
+    headerName: "Name",
+    width: 160,
+    valueGetter: (params) =>
+      `${params.getValue(params.id, "first_name")} ${params.getValue(
+        params.id,
+        "last_name"
+      )}`,
   },
   {
     field: "position",
@@ -41,11 +24,6 @@ const columns = [
     sortable: false,
     width: 200,
   },
-  {
-    field: `${SingleAppRating}`,
-    headerName: "Rating",
-    width: 100,
-  },
 ]
 
 export default function ApplicantTable() {
@@ -57,7 +35,6 @@ export default function ApplicantTable() {
       .then((data) => {
         setApplicants(data)
         console.log(applicants)
-        let imageUrlForTable = applicants.photo_url
       })
       //   .then(console.log(applicants))
       .catch((err) => console.error(err))

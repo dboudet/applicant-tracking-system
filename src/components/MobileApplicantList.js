@@ -2,7 +2,7 @@ import { Container } from "@material-ui/core"
 import { useState, useEffect } from "react"
 import SingleApplicant from "./SingleApplicant"
 
-export default function AllApplicants() {
+export default function MobileApplicantList() {
   const [applicants, setApplicants] = useState([])
 
   useEffect(() => {
