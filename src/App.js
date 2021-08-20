@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
-import { CssBaseline, Toolbar } from "@material-ui/core"
+import { Container, CssBaseline, Toolbar } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 import NavBar from "./components/NavBar"
 import SideDrawer from "./components/SideDrawer"
@@ -34,27 +34,32 @@ export default function App() {
           <SideDrawer />
           <div className={classes.content}>
             <Toolbar />
-            <Switch>
-              <Route path="/view-applicant/:applicantId">
-                <ViewApplicant />
-              </Route>
-              <Route path="/applicants-list">
-                <ApplicantList />
-              </Route>
-              <Route path="/applicants-list-mobile">
-                <MobileApplicantList />
-              </Route>
-              <Route path="/applicants-table">
-                <ApplicantTable />
-              </Route>
-              <Route path="/add-new-applicant">
-                <AddApplicant />
-              </Route>
-              <Route path="/">
-                <ApplicantList />
-                {/* <Home /> */}
-              </Route>
-            </Switch>
+            <Container
+              maxWidth="lg"
+              style={{ minHeight: "70vh", paddingTop: "20px" }}
+            >
+              <Switch>
+                <Route path="/view-applicant/:applicantId">
+                  <ViewApplicant />
+                </Route>
+                <Route path="/applicants-list">
+                  <ApplicantList />
+                </Route>
+                <Route path="/applicants-list-mobile">
+                  <MobileApplicantList />
+                </Route>
+                <Route path="/applicants-table">
+                  <ApplicantTable />
+                </Route>
+                <Route path="/add-new-applicant">
+                  <AddApplicant />
+                </Route>
+                <Route path="/">
+                  <ApplicantList />
+                  {/* <Home /> */}
+                </Route>
+              </Switch>
+            </Container>
           </div>
         </div>
         <Footer />

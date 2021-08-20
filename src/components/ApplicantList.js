@@ -14,6 +14,7 @@ import {
   Box,
   Paper,
 } from "@material-ui/core"
+import BreadcrumbsList from "../components/BreadcrumbsList"
 import Rating from "@material-ui/lab/Rating"
 import ApplicantPhoto from "./ApplicantPhoto"
 import EditIcon from "@material-ui/icons/Edit"
@@ -35,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(4, 0, 2),
     display: "flex",
     justifyContent: "space-between",
+    alignItems: "center",
     flexWrap: "wrap",
   },
   large: {
@@ -62,8 +64,8 @@ export default function ApplicantList() {
 
   return (
     <div className={classes.root}>
-      <Typography variant="h4" className={classes.title}>
-        Applicants
+      <Typography className={classes.title}>
+      <BreadcrumbsList />
         <FormControlLabel
           control={
             <Switch
@@ -81,7 +83,7 @@ export default function ApplicantList() {
           <List>
             {applicants?.map((applicant) => {
               return (
-                <ListItem style={{overflow:"scroll"}}>
+                <ListItem key={applicant.id} style={{overflow:"scroll"}}>
                   <ListItemAvatar>
                     <Avatar className={classes.large}>
                       <ApplicantPhoto
@@ -102,7 +104,7 @@ export default function ApplicantList() {
                   <Box style={{ flexBasis: 140 }}>
                     <Rating
                       name="Applicant Assessment"
-                      value={applicant.rating}
+                      value={applicant.rating_1}
                       readOnly
                       // onChange={(event, newValue) => {
                       //   setValue(newValue)
@@ -110,14 +112,13 @@ export default function ApplicantList() {
                     />
                   </Box>
                   <Button
-                    variant="outlined"
                     color="primary"
                     size="small"
                     className={classes.button}
                     startIcon={<EditIcon />}
                     disabled={editDisabled}
                   >
-                    <Link to={`/view-applicant/${applicant?.id}`}>
+                    <Link to={`/view-applicant/${applicant?.id}`} style={{color:"inherit", textDecoration:"inherit"}}>
                       View/Edit
                     </Link>
                   </Button>

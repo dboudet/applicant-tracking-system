@@ -1,3 +1,4 @@
+import { Typography } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 
 const useStyles = makeStyles((theme) => ({
@@ -7,7 +8,9 @@ const useStyles = makeStyles((theme) => ({
     height: "80px",
     padding: "24px",
     display: "flex",
+    flexDirection: "column",
     justifyContent: "center",
+    alignItems: "center",
     width: "100%",
   },
 }))
@@ -17,8 +20,12 @@ export default function Footer() {
 
   return (
     <footer className={classes.footer}>
-      <p>&copy; {new Date().getFullYear()} Dan Boudet</p> 
-      <p><em>Built with React and Material-UI</em></p>
+      <Typography variant="body1" component="h4">
+        Proudly developed by Dan Boudet
+      </Typography>
+      {/* <Typography variant="p" component="h5">
+        <em>Built with React and Material-UI</em>
+      </Typography> */}
     </footer>
   )
 }

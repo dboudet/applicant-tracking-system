@@ -7,6 +7,7 @@ import {
   Typography,
 } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
+import BreadcrumbsAppForm from "../components/BreadcrumbsAppForm"
 import CloudUploadIcon from "@material-ui/icons/CloudUpload"
 
 const useStyles = makeStyles((theme) => ({
@@ -30,19 +31,34 @@ const useStyles = makeStyles((theme) => ({
 
 export default function AddApplicant() {
   const [loading, setLoading] = useState(false)
+  const [firstName, setFirstName] = useState("")
+  const [lastName, setLastName] = useState("")
+  const [email, setEmail] = useState("")
+  const [position, setPosition] = useState("")
+  const [photoUrl, setPhotoUrl] = useState(
+    "http://dboudet-ats.s3-website-us-east-1.amazonaws.com/photo-placeholder.png"
+  )
+  const [photoUploaded, setPhotoUploaded] = useState(false)
 
   const classes = useStyles()
+
   const formData = {
-    firstName: "Danielito",
-    lastName: "Boudet",
-    email: "dan08191230@bocacode.com",
-    position: "API Tester 2",
-    photoUrl: "https://bocacode.com/assets/images/candidates/dan-boudet.jpg",
+    firstName: firstName,
+    lastName: lastName,
+    email: email,
+    position: position,
+    photoUrl: photoUrl,
   }
 
-  const addApplicantToDB = (event) => {
+  const handlePhotoUpload = () => {
+    const photoUploadInput = document.getElementById("photoUploadInput")
+    const uploadedPhoto = photoUploadInput.files[0].name
+  }
+
+  const handleFormSubmit = (event) => {
     event.preventDefault()
     setLoading(true)
+    console.log()
 
     fetch(`${process.env.REACT_APP_API_ENDPOINT}/ats/new-applicant`, {
       method: "POST",
@@ -66,7 +82,8 @@ export default function AddApplicant() {
   }
 
   return (
-    <Container>
+    <>
+      <BreadcrumbsAppForm />
       <Paper>
         <Typography
           variant="h3"
@@ -80,32 +97,31 @@ export default function AddApplicant() {
             required
             id="firstName"
             label="First Name"
+            onChange={(event) => setFirstName(event.target.value)}
           />
           <TextField
             className={classes.textInput}
             required
             id="lastName"
             label="Last Name"
+            onChange={(event) => setLastName(event.target.value)}
           />
           <TextField
             className={classes.textInput}
             required
             id="email"
             label="Email Address"
+            onChange={(event) => setEmail(event.target.value)}
           />
           <TextField
             className={classes.textInput}
             required
             id="position"
             label="Position"
-          />
-          <TextField
-            className={classes.textInput}
-            id="photoUrl"
-            label="Photo URL... (backup)"
+            onChange={(event) => setPosition(event.target.value)}
           />
           <label
-            htmlFor="photoUrl"
+            htmlFor="photoUploadInput"
             style={{
               width: "50ch",
               display: "flex",
@@ -126,15 +142,25 @@ export default function AddApplicant() {
           <input
             accept="image/*"
             className={classes.uploadInput}
-            id="photoUrl"
-            multiple
+            id="photoUploadInput"
             type="file"
+            onChange={handlePhotoUpload}
           />
-          <Button variant="contained" color="primary" size="large">
+          <TextField
+            className={classes.textInput}
+            id="photoUrlBackup"
+            label="Photo URL... (backup)"
+          />
+          <Button
+            onClick={handleFormSubmit}
+            variant="contained"
+            color="primary"
+            size="large"
+          >
             Add Applicant
           </Button>
         </form>
       </Paper>
-    </Container>
+    </>
   )
 }

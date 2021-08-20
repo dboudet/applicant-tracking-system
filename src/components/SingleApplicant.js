@@ -4,10 +4,6 @@ import { useState } from "react"
 import { makeStyles } from "@material-ui/core/styles"
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-    padding: theme.spacing(2),
-  },
   paper: {
     padding: theme.spacing(3),
     textAlign: "center",
@@ -16,42 +12,40 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function SingleApplicant(props) {
-  const { first_name, last_name, email, photo_url, position, rating } =
+  const { first_name, last_name, email, photo_url, position, rating_1 } =
     props.value
 
   // const [value, setValue] = useState(5)
   const classes = useStyles()
 
   return (
-    <div className={classes.root}>
-      <Paper className={classes.paper}>
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={4}>
-            <img
-              src={photo_url}
-              alt={`${first_name} ${last_name}`}
-              width="150"
-              height="auto"
-              style={{ borderRadius: "50%", maxWidth: "100%" }}
+    <Paper className={classes.paper}>
+      <Grid container spacing={3}>
+        <Grid item xs={12} md={4}>
+          <img
+            src={photo_url}
+            alt={`${first_name} ${last_name}`}
+            width="150"
+            height="auto"
+            style={{ borderRadius: "50%", maxWidth: "100%" }}
+          />
+          <Box component="fieldset" mb={3} borderColor="transparent">
+            <Rating
+              name="simple-controlled"
+              value={rating_1}
+              // onChange={(event, newValue) => {
+              //   setValue(newValue)
+              // }}
             />
-            <Box component="fieldset" mb={3} borderColor="transparent">
-              <Rating
-                name="simple-controlled"
-                value={rating}
-                // onChange={(event, newValue) => {
-                //   setValue(newValue)
-                // }}
-              />
-            </Box>
-          </Grid>
-          <Grid item xs={12} md={8}>
-            <Typography variant="h3">{`${first_name} ${last_name}`}</Typography>
-            <Typography variant="body1">{email}</Typography>
-            <Typography variant="body1">{position}</Typography>
-            <Typography variant="body2">Notes</Typography>
-          </Grid>
+          </Box>
         </Grid>
-      </Paper>
-    </div>
+        <Grid item xs={12} md={8}>
+          <Typography variant="h3">{`${first_name} ${last_name}`}</Typography>
+          <Typography variant="body1">{email}</Typography>
+          <Typography variant="body1">{position}</Typography>
+          <Typography variant="body2">Notes</Typography>
+        </Grid>
+      </Grid>
+    </Paper>
   )
 }
