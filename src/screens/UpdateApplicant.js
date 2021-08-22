@@ -22,7 +22,7 @@ export default function UpdateApplicant() {
       <BreadcrumbsAppForm />
       <Paper>
         <Typography
-          variant="h3"
+          variant="h4"
           style={{ textAlign: "center", paddingTop: 20 }}
         >
           Update Applicant

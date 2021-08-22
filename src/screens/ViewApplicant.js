@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react"
 import { useParams, Link } from "react-router-dom"
 import { Grid, Box, Paper, Typography, Button } from "@material-ui/core"
-import Rating from "@material-ui/lab/Rating"
 import { makeStyles } from "@material-ui/core/styles"
 import EditIcon from "@material-ui/icons/Edit"
 import BreadcrumbsSingle from "../components/BreadcrumbsSingle"
+import RatingReadOnly from "../components/RatingReadOnly"
+import AppStageSepperReadOnly from "../components/AppStageStepperReadOnly"
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -13,8 +14,14 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     padding: theme.spacing(3),
-    textAlign: "center",
-    color: theme.palette.text.primary,
+    minHeight: "70vh",
+  },
+  gridColumn: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-around",
+    alignItems: "center",
+    minHeight: 350,
   },
 }))
 
@@ -31,7 +38,6 @@ export default function ViewApplicant() {
       .catch((err) => console.error(err))
   }, [applicantId])
 
-  const [value,setValue] = useState(applicant.score)
   const classes = useStyles()
 
   return (
@@ -39,17 +45,7 @@ export default function ViewApplicant() {
       <BreadcrumbsSingle />
       <Paper className={classes.paper}>
         <Grid container spacing={3}>
-          <Grid
-            item
-            xs={12}
-            md={4}
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
+          <Grid className={classes.gridColumn} item xs={12} md={4}>
             <img
               src={applicant.photo_url}
               alt={`${applicant.first_name} ${applicant.last_name}`}
@@ -57,9 +53,11 @@ export default function ViewApplicant() {
               height="auto"
               style={{ borderRadius: "50%", maxWidth: "100%" }}
             />
-            <Box component="fieldset" mb={3} borderColor="transparent">
-              <Rating name="Applicant Score" value={value} readOnly />
-            </Box>
+            <Typography
+              variant="h4"
+              component="h2"
+            >{`${applicant.first_name} ${applicant.last_name}`}</Typography>
+            <Typography variant="subtitle2">{applicant.email}</Typography>
             <Link
               to={`/applicants/update/${applicant.id}`}
               style={{ color: "inherit", textDecoration: "inherit" }}
@@ -70,11 +68,20 @@ export default function ViewApplicant() {
               </Button>
             </Link>
           </Grid>
-          <Grid item xs={12} md={8}>
-            <Typography variant="h3">{`${applicant.first_name} ${applicant.last_name}`}</Typography>
-            <Typography variant="body1">{applicant.email}</Typography>
-            <Typography variant="body1">{applicant.position}</Typography>
-            <Typography variant="body2">{applicant.notes}</Typography>
+          <Grid className={classes.gridColumn} item xs={12} md={8}>
+            <Typography variant="h6">{applicant.position}</Typography>
+            <AppStageSepperReadOnly
+              key={applicant.id}
+              application_stage={applicant.application_stage}
+            />
+            <RatingReadOnly key={applicant.id} score={applicant.score} />
+            {applicant.notes && (
+              <Typography variant="body1" textAlign="center">
+                Notes:
+                <br />
+                {applicant.notes}
+              </Typography>
+            )}
           </Grid>
         </Grid>
       </Paper>

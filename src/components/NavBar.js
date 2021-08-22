@@ -13,6 +13,7 @@ import {
 import MoreIcon from "@material-ui/icons/MoreVert"
 import SearchIcon from "@material-ui/icons/Search"
 import AccountCircle from "@material-ui/icons/AccountCircle"
+import { Link } from "react-router-dom"
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -29,6 +30,10 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up("sm")]: {
       display: "block",
     },
+  },
+  titleLink: {
+    color: "inherit",
+    textDecoration: "none",
   },
   search: {
     position: "relative",
@@ -161,7 +166,9 @@ export default function NavBar() {
             <MenuIcon />
           </IconButton> */}
           <Typography className={classes.title} variant="h6" noWrap>
-            Applicant Tracking System
+            <Link to="/" className={classes.titleLink}>
+              Applicant Tracking System
+            </Link>
           </Typography>
           <div className={classes.search}>
             <div className={classes.searchIcon}>

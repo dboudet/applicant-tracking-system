@@ -11,18 +11,18 @@ import {
   Switch,
   Typography,
   Button,
-  Box,
   Paper,
+  Box,
 } from "@material-ui/core"
 import BreadcrumbsList from "../components/BreadcrumbsList"
-import Rating from "@material-ui/lab/Rating"
+import AppStageSepperReadOnly from "../components/AppStageStepperReadOnly"
 import ApplicantPhoto from "./ApplicantPhoto"
 import EditIcon from "@material-ui/icons/Edit"
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    maxWidth: "75vw",
+    maxWidth: "100%",
     minWidth: 740,
     margin: "auto",
   },
@@ -45,6 +45,7 @@ export default function ApplicantList() {
   const classes = useStyles()
   const [applicants, setApplicants] = useState([])
   const [secondary, setSecondary] = useState(false)
+  const [showStage, setShowStage] = useState(false)
   const [editDisabled, setEditDisabled] = useState(false)
 
   useEffect(() => {
@@ -58,20 +59,20 @@ export default function ApplicantList() {
 
   return (
     <div className={classes.root}>
-      <Typography className={classes.title}>
+      <Box className={classes.title}>
         <BreadcrumbsList />
         <FormControlLabel
           control={
             <Switch
-              checked={secondary}
-              onChange={(event) => setSecondary(event.target.checked)}
-              name="showEmail"
+              checked={showStage}
+              onChange={(event) => setShowStage(event.target.checked)}
+              name="showStage"
               color="primary"
             />
           }
-          label="Show Email"
+          label="Show Applicant Progress"
         />
-      </Typography>
+      </Box>
       <div className={classes.applicantList}>
         <Paper>
           <List>
@@ -89,22 +90,18 @@ export default function ApplicantList() {
                   </ListItemAvatar>
                   <ListItemText
                     primary={applicant.first_name + " " + applicant.last_name}
-                    secondary={secondary ? applicant.email : null}
+                    secondary={applicant.email}
                     style={{ flexBasis: 150 }}
                   />
                   <Typography style={{ flexBasis: 180, flexGrow: 1 }}>
                     {applicant.position}
                   </Typography>
-                  <Box style={{ flexBasis: 140 }}>
-                    <Rating
-                      name="Applicant Score"
-                      value={applicant.score}
-                      readOnly
-                      // onChange={(event, newValue) => {
-                      //   setValue(newValue)
-                      // }}
+                  {showStage ? (
+                    <AppStageSepperReadOnly
+                      key={applicant.id}
+                      application_stage={applicant.application_stage}
                     />
-                  </Box>
+                  ) : null}
                   <Button
                     color="primary"
                     size="small"

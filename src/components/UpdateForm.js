@@ -8,6 +8,7 @@ import { Box, Button, TextField, Typography } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 import CloudUploadIcon from "@material-ui/icons/CloudUpload"
 import Rating from "@material-ui/lab/Rating"
+import AppStageStepper from "./AppStageStepper"
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,14 +22,11 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
   },
   textInput: {
-    width: "50ch",
+    width: "70ch",
   },
-  textArea: {
-    width: "50ch",
+  uploadInput: {
+    display: "none",
   },
-  // uploadInput: {
-  //   display: "none",
-  // },
 }))
 
 export default function UpdateForm(props) {
@@ -55,7 +53,8 @@ export default function UpdateForm(props) {
   const [newNotes, setNewNotes] = useState(notes)
   const [value, setValue] = useState(score)
   const [newScore, setNewScore] = useState(score)
-  const [newApplicationStage, setNewApplicationStage] = useState(0) // NEED TO UPDATE
+  const [newApplicationStage, setNewApplicationStage] =
+    useState(application_stage)
 
   const handlePhotoUpload = () => {
     // reference file uploaded - with unique filename
@@ -122,8 +121,7 @@ export default function UpdateForm(props) {
         response.json()
       })
       .then((data) => {
-        setLoading(false)
-        alert("Applicant information has been successfully updated!")
+        alert("Applicant information has been successfully updated.")
       })
       .catch((err) => {
         setLoading(false)
@@ -133,6 +131,32 @@ export default function UpdateForm(props) {
 
   return (
     <form className={classes.root} noValidate autoComplete="off">
+      <label
+        htmlFor="photoUploadInput"
+        style={{
+          width: "50ch",
+          display: "flex",
+          justifyContent: "space-around",
+          alignItems: "center",
+        }}
+      >
+        <img src={newPhotoUrl} style={{ width: "100px", height: "100px" }} />
+        <Button
+          variant="contained"
+          color="primary"
+          component="span"
+          startIcon={<CloudUploadIcon />}
+        >
+          Upload Profile Photo
+        </Button>
+        <input
+          accept="image/*"
+          className={classes.uploadInput}
+          id="photoUploadInput"
+          type="file"
+          onChange={handlePhotoUpload}
+        />
+      </label>
       <TextField
         className={classes.textInput}
         required
@@ -165,45 +189,13 @@ export default function UpdateForm(props) {
         defaultValue={position}
         onChange={(event) => setNewPosition(event.target.value)}
       />
-      {/* <label
-          htmlFor="photoUploadInput"
-          style={{
-            width: "50ch",
-            display: "flex",
-            justifyContent: "space-around",
-            alignItems: "center",
-          }}
-        >
-          Upload a photo/headshot (.jpg or .png)
-          <Button
-            variant="contained"
-            color="primary"
-            component="span"
-            startIcon={<CloudUploadIcon />}
-          >
-            Upload
-          </Button>
-        </label> */}
-      <label
-        htmlFor="photoUploadInput"
-        style={{
-          width: "50ch",
-          display: "flex",
-          justifyContent: "space-around",
-          alignItems: "center",
-        }}
-      >
-        <img src={newPhotoUrl} style={{ width: "100px", height: "100px" }} />
-        <input
-          accept="image/*"
-          className={classes.uploadInput}
-          id="photoUploadInput"
-          type="file"
-          onChange={handlePhotoUpload}
-        />
-      </label>
-      <Box component="fieldset" mb={3} borderColor="transparent">
-        <Typography component="legend">Applicant Score</Typography>
+      <AppStageStepper
+        key={id}
+        application_stage={application_stage}
+        setNewApplicationStage={setNewApplicationStage}
+      />
+      <Box component="fieldset" mb={2} borderColor="transparent">
+        <Typography component="legend">Assessment Score</Typography>
         <Rating
           name="simple-controlled"
           value={value}
@@ -214,11 +206,10 @@ export default function UpdateForm(props) {
         />
       </Box>
       <TextField
-        className={classes.textArea}
+        className={classes.textInput}
         id="notes"
+        label="Additional Notes"
         multiline
-        minRows={6}
-        placeholder="Additional notes..."
         defaultValue={notes}
         onChange={(event) => setNewNotes(event.target.value)}
       />
@@ -228,7 +219,7 @@ export default function UpdateForm(props) {
         color="primary"
         size="large"
       >
-        Update Applicant
+        Save Changes
       </Button>
     </form>
   )

@@ -1,11 +1,10 @@
+// using Firebase for file storage
+import firebase from "firebase/app"
+import "firebase/storage"
+import { firebaseConfig } from "../config"
+
 import { useState } from "react"
-import {
-  Button,
-  Container,
-  Paper,
-  TextField,
-  Typography,
-} from "@material-ui/core"
+import { Button, Paper, TextField, Typography } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 import BreadcrumbsAppForm from "../components/BreadcrumbsAppForm"
 import CloudUploadIcon from "@material-ui/icons/CloudUpload"
@@ -24,12 +23,14 @@ const useStyles = makeStyles((theme) => ({
   textInput: {
     width: "50ch",
   },
-  uploadInput: {
-    display: "none",
-  },
+  // uploadInput: {
+  //   display: "none",
+  // },
 }))
 
 export default function AddApplicant() {
+  const classes = useStyles()
+
   const [loading, setLoading] = useState(false)
   const [firstName, setFirstName] = useState("")
   const [lastName, setLastName] = useState("")
@@ -38,27 +39,61 @@ export default function AddApplicant() {
   const [photoUrl, setPhotoUrl] = useState(
     "http://dboudet-ats.s3-website-us-east-1.amazonaws.com/photo-placeholder.png"
   )
-  const [photoUploaded, setPhotoUploaded] = useState(false)
-
-  const classes = useStyles()
-
-  const formData = {
-    firstName: firstName,
-    lastName: lastName,
-    email: email,
-    position: position,
-    photoUrl: photoUrl,
-  }
+  const [resumeUrl, setResumeUrl] = useState(
+    "https://firebasestorage.googleapis.com/v0/b/dan-boudet-com.appspot.com/o/app-tracking-system%2Fresumes%2Fmissing-resume.pdf?alt=media&token=78eacbf8-4b92-4070-8534-804a1284c6c4"
+  )
+  const [notes, setNotes] = useState("")
+  const [score, setScore] = useState(0)
+  const [applicationStage, setApplicationStage] = useState(0)
 
   const handlePhotoUpload = () => {
-    const photoUploadInput = document.getElementById("photoUploadInput")
-    const uploadedPhoto = photoUploadInput.files[0].name
+    const uniqueFilename = require("unique-filename")
+    const mime = require("mime-types")
+
+    // compile filename, extension, and metadata
+    let selectedPhoto = document.getElementById("photoUploadInput").files[0]
+    let metadata = {
+      contentType: selectedPhoto.type,
+    }
+    let selectedPhotoExtension = mime.extension(selectedPhoto.type)
+    let selectedPhotoUniqueName =
+      uniqueFilename("", "photo", selectedPhoto.name) +
+      "." +
+      selectedPhotoExtension
+    // console.log(selectedPhotoUniqueName)
+
+    // upload to Firebase
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig)
+    }
+
+    const storageRef = firebase.storage().ref()
+    let selectedPhotoRef = storageRef.child(
+      `app-tracking-system/photos/${selectedPhotoUniqueName}`
+    )
+    selectedPhotoRef
+      .put(selectedPhoto, metadata)
+      .then(() => {
+        selectedPhotoRef.getDownloadURL().then((downloadURL) => {
+          setPhotoUrl(downloadURL)
+        })
+      })
+      .catch((err) => console.log(err))
   }
 
   const handleFormSubmit = (event) => {
     event.preventDefault()
     setLoading(true)
-    console.log()
+
+    const formData = {
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      position: position,
+      photoUrl: photoUrl,
+      resumeUrl: resumeUrl,
+      notes: notes,
+    }
 
     fetch(`${process.env.REACT_APP_API_ENDPOINT}/ats/new-applicant`, {
       method: "POST",
@@ -69,15 +104,15 @@ export default function AddApplicant() {
     })
       .then((response) => {
         setLoading(false)
-        return response.json()
+        response.json()
       })
       .then((data) => {
         setLoading(false)
-        console.log("Applicant added ----->", data)
+        alert("Applicant has been successfully added to the system")
       })
       .catch((err) => {
         setLoading(false)
-        console.error(err)
+        alert("Error creating applicant: ", err)
       })
   }
 
@@ -86,7 +121,7 @@ export default function AddApplicant() {
       <BreadcrumbsAppForm />
       <Paper>
         <Typography
-          variant="h3"
+          variant="h4"
           style={{ textAlign: "center", paddingTop: 20 }}
         >
           Add an Applicant
@@ -120,37 +155,35 @@ export default function AddApplicant() {
             label="Position"
             onChange={(event) => setPosition(event.target.value)}
           />
+          <TextField
+            className={classes.textInput}
+            id="notes"
+            label="Additional Notes"
+            multiline
+            defaultValue={notes}
+            onChange={(event) => setNotes(event.target.value)}
+          />
           <label
             htmlFor="photoUploadInput"
             style={{
               width: "50ch",
               display: "flex",
+              flexDirection: "column",
               justifyContent: "space-around",
               alignItems: "center",
             }}
           >
-            Upload a photo/headshot (.jpg or .png)
-            <Button
-              variant="contained"
-              color="primary"
-              component="span"
-              startIcon={<CloudUploadIcon />}
-            >
-              Upload
-            </Button>
+            <Typography variant="body1" style={{ marginBottom: "12px" }}>
+              Please upload a photo/headshot, if available:
+            </Typography>
+            <input
+              accept="image/*"
+              className={classes.uploadInput}
+              id="photoUploadInput"
+              type="file"
+              onChange={handlePhotoUpload}
+            />
           </label>
-          <input
-            accept="image/*"
-            className={classes.uploadInput}
-            id="photoUploadInput"
-            type="file"
-            onChange={handlePhotoUpload}
-          />
-          <TextField
-            className={classes.textInput}
-            id="photoUrlBackup"
-            label="Photo URL... (backup)"
-          />
           <Button
             onClick={handleFormSubmit}
             variant="contained"
