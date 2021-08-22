@@ -10,7 +10,7 @@ export default function SingleAppRating() {
       <Box component="fieldset" mb={3} borderColor="transparent">
         <Typography component="legend">Rating</Typography>
         <Rating
-          name="simple-controlled"
+          name="pristine"
           value={value}
           onChange={(event, newValue) => {
             setValue(newValue)

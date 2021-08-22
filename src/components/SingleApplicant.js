@@ -1,7 +1,8 @@
-import { Grid, Box, Paper, Typography } from "@material-ui/core"
+import { Link } from "react-router-dom"
+import { Grid, Box, Paper, Typography, Button } from "@material-ui/core"
 import Rating from "@material-ui/lab/Rating"
-import { useState } from "react"
 import { makeStyles } from "@material-ui/core/styles"
+import EditIcon from "@material-ui/icons/Edit"
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -12,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function SingleApplicant(props) {
-  const { first_name, last_name, email, photo_url, position, rating_1 } =
+  const { id, first_name, last_name, email, photo_url, position, score } =
     props.value
 
   // const [value, setValue] = useState(5)
@@ -21,7 +22,17 @@ export default function SingleApplicant(props) {
   return (
     <Paper className={classes.paper}>
       <Grid container spacing={3}>
-        <Grid item xs={12} md={4}>
+        <Grid
+          item
+          xs={12}
+          md={4}
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
           <img
             src={photo_url}
             alt={`${first_name} ${last_name}`}
@@ -30,14 +41,17 @@ export default function SingleApplicant(props) {
             style={{ borderRadius: "50%", maxWidth: "100%" }}
           />
           <Box component="fieldset" mb={3} borderColor="transparent">
-            <Rating
-              name="simple-controlled"
-              value={rating_1}
-              // onChange={(event, newValue) => {
-              //   setValue(newValue)
-              // }}
-            />
+            <Rating name="Applicant Score" value={score} readOnly />
           </Box>
+          <Link
+            to={`/applicants/update/${id}`}
+            style={{ color: "inherit", textDecoration: "inherit" }}
+          >
+            <Button variant="contained" color="primary" size="large">
+              Update Applicant
+              <EditIcon />
+            </Button>
+          </Link>
         </Grid>
         <Grid item xs={12} md={8}>
           <Typography variant="h3">{`${first_name} ${last_name}`}</Typography>

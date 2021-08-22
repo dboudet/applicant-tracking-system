@@ -27,7 +27,7 @@ export default function BreadcrumbsAppForm() {
       </Link>
       <Typography color="textPrimary">
         <PersonIcon className={classes.icon} />
-        Add Applicant
+        Applicant Form
       </Typography>
     </Breadcrumbs>
   )

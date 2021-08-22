@@ -42,11 +42,11 @@ export default function ApplicantTable() {
 
   return (
     <Container maxWidth="lg" style={{ minHeight: "70vh", paddingTop: "20px" }}>
-      <div style={{ height: "40vh", width: "100%" }}>
+      <div style={{ height: 500, width: "100%" }}>
         <DataGrid
           rows={applicants}
           columns={columns}
-          pageSize={3}
+          pageSize={5}
           rowsPerPageOptions={[2]}
         />
       </div>

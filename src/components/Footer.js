@@ -21,7 +21,7 @@ export default function Footer() {
   return (
     <footer className={classes.footer}>
       <Typography variant="body1" component="h4">
-        Proudly developed by Dan Boudet
+        Proudly created by Dan Boudet
       </Typography>
       {/* <Typography variant="p" component="h5">
         <em>Built with React and Material-UI</em>

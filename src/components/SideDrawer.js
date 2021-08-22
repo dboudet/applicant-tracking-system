@@ -9,11 +9,12 @@ import {
 } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 import {
-  DesktopWindows,
   Devices,
   FilterList,
   PersonAdd,
 } from "@material-ui/icons"
+import ListIcon from '@material-ui/icons/List'
+import TableChartOutlinedIcon from '@material-ui/icons/TableChartOutlined'
 import { Link } from "react-router-dom"
 
 const drawerWidth = 240
@@ -52,7 +53,7 @@ export default function SideDrawer() {
           <Link to="/applicants-list" className={classes.drawerLink}>
             <ListItem button key="List">
               <ListItemIcon>
-                <DesktopWindows />
+                <ListIcon />
               </ListItemIcon>
               <ListItemText primary="Applicant List" />
             </ListItem>
@@ -60,7 +61,7 @@ export default function SideDrawer() {
           <Link to="/applicants-table" className={classes.drawerLink}>
             <ListItem button key="Table">
               <ListItemIcon>
-                <DesktopWindows />
+                <TableChartOutlinedIcon />
               </ListItemIcon>
               <ListItemText primary="Applicant Table" />
             </ListItem>

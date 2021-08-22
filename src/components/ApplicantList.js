@@ -26,12 +26,6 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 740,
     margin: "auto",
   },
-  applicantList: {
-    backgroundColor: theme.palette.background.paper,
-  },
-  // appListItem: {
-  //   justifyContent: "space-between",
-  // },
   title: {
     margin: theme.spacing(4, 0, 2),
     display: "flex",
@@ -65,7 +59,7 @@ export default function ApplicantList() {
   return (
     <div className={classes.root}>
       <Typography className={classes.title}>
-      <BreadcrumbsList />
+        <BreadcrumbsList />
         <FormControlLabel
           control={
             <Switch
@@ -83,7 +77,7 @@ export default function ApplicantList() {
           <List>
             {applicants?.map((applicant) => {
               return (
-                <ListItem key={applicant.id} style={{overflow:"scroll"}}>
+                <ListItem key={applicant.id} style={{ overflow: "scroll" }}>
                   <ListItemAvatar>
                     <Avatar className={classes.large}>
                       <ApplicantPhoto
@@ -103,8 +97,8 @@ export default function ApplicantList() {
                   </Typography>
                   <Box style={{ flexBasis: 140 }}>
                     <Rating
-                      name="Applicant Assessment"
-                      value={applicant.rating_1}
+                      name="Applicant Score"
+                      value={applicant.score}
                       readOnly
                       // onChange={(event, newValue) => {
                       //   setValue(newValue)
@@ -118,8 +112,11 @@ export default function ApplicantList() {
                     startIcon={<EditIcon />}
                     disabled={editDisabled}
                   >
-                    <Link to={`/view-applicant/${applicant?.id}`} style={{color:"inherit", textDecoration:"inherit"}}>
-                      View/Edit
+                    <Link
+                      to={`/view-applicant/${applicant?.id}`}
+                      style={{ color: "inherit", textDecoration: "inherit" }}
+                    >
+                      View/Update
                     </Link>
                   </Button>
                 </ListItem>

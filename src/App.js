@@ -9,6 +9,7 @@ import ApplicantList from "./components/ApplicantList"
 import Footer from "./components/Footer"
 import ViewApplicant from "./screens/ViewApplicant"
 import AddApplicant from "./screens/AddApplicant"
+import UpdateApplicant from "./screens/UpdateApplicant"
 import "./App.css"
 
 const useStyles = makeStyles((theme) => ({
@@ -39,6 +40,9 @@ export default function App() {
               style={{ minHeight: "70vh", paddingTop: "20px" }}
             >
               <Switch>
+                <Route path="/applicants/update/:applicantId">
+                  <UpdateApplicant />
+                </Route>
                 <Route path="/view-applicant/:applicantId">
                   <ViewApplicant />
                 </Route>
