@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
-import { Paper, Typography } from "@material-ui/core"
+import { Button, ButtonGroup, Link, Paper, Typography } from "@material-ui/core"
 import BreadcrumbsAppForm from "../components/BreadcrumbsAppForm"
 import UpdateForm from "../components/UpdateForm"
 
@@ -28,6 +28,20 @@ export default function UpdateApplicant() {
           Update Applicant
         </Typography>
         <UpdateForm key={applicant.id} value={applicant} />
+        <ButtonGroup
+          style={{ display: "flex", justifyContent: "space-around" }}
+          color="primary"
+          aria-label="outlined primary button group"
+        >
+          {applicant.id > 1 && (
+            <Link href={"/applicants/update/" + (applicant.id - 1)}>
+              <Button>&laquo; Previous</Button>
+            </Link>
+          )}
+          {applicant?.id + 1 !== null && <Link href={"/applicants/update/" + (applicant.id + 1)}>
+            <Button>Next &raquo;</Button>
+          </Link>}
+        </ButtonGroup>
       </Paper>
     </>
   )

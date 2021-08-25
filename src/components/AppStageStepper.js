@@ -73,7 +73,7 @@ export default function AppStageStepper({application_stage, setNewApplicationSta
               >
                 Back
               </Button>
-              <Button variant="contained" color="primary" onClick={handleNext}>
+              <Button variant="outlined" color="primary" onClick={handleNext}>
                 {activeStep === steps.length - 1 ? "Hired!" : "Complete This Step"}
               </Button>
             </div>

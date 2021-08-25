@@ -27,7 +27,6 @@ const useStyles = makeStyles((theme) => ({
     margin: "auto",
   },
   title: {
-    margin: theme.spacing(4, 0, 2),
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
@@ -44,8 +43,7 @@ const useStyles = makeStyles((theme) => ({
 export default function ApplicantList() {
   const classes = useStyles()
   const [applicants, setApplicants] = useState([])
-  const [secondary, setSecondary] = useState(false)
-  const [showStage, setShowStage] = useState(false)
+  const [showStage, setShowStage] = useState(true)
   const [editDisabled, setEditDisabled] = useState(false)
 
   useEffect(() => {

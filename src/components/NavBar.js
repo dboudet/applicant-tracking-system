@@ -1,4 +1,8 @@
+import firebase from "firebase"
+import "firebase/auth"
+import { firebaseConfig } from "../config"
 import { useState } from "react"
+import { Link, useHistory } from "react-router-dom"
 import { alpha, makeStyles } from "@material-ui/core/styles"
 import {
   CssBaseline,
@@ -13,7 +17,6 @@ import {
 import MoreIcon from "@material-ui/icons/MoreVert"
 import SearchIcon from "@material-ui/icons/Search"
 import AccountCircle from "@material-ui/icons/AccountCircle"
-import { Link } from "react-router-dom"
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -86,11 +89,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-export default function NavBar() {
+export default function NavBar({ user, setUser }) {
   const classes = useStyles()
+  const history = useHistory()
+
   const [anchorEl, setAnchorEl] = useState(null)
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null)
-
   const isMenuOpen = Boolean(anchorEl)
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl)
 
@@ -111,6 +115,26 @@ export default function NavBar() {
     setMobileMoreAnchorEl(event.currentTarget)
   }
 
+  const handleLogout = () => {
+    setAnchorEl(null)
+    handleMobileMenuClose()
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig)
+    }
+    firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        // Sign-out successful.
+        setUser(false)
+        // localStorage.removeItem("user")
+        history.push("/login")
+      })
+      .catch((error) => {
+        // An error happened.
+      })
+  }
+
   const menuId = "primary-search-account-menu"
   const renderMenu = (
     <Menu
@@ -122,8 +146,16 @@ export default function NavBar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      {!user && <MenuItem onClick={handleMenuClose}>
+        <Link
+          to="/login"
+          style={{ color: "inherit", textDecoration: "inherit" }}
+        >
+          Log in
+        </Link>
+      </MenuItem>}
+
+      {user && <MenuItem onClick={handleLogout}>Log out</MenuItem>}
     </Menu>
   )
 
@@ -140,14 +172,22 @@ export default function NavBar() {
     >
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
-          aria-label="account of current user"
+          aria-label="Log in to view applicants"
           aria-controls="primary-search-account-menu"
           aria-haspopup="true"
           color="inherit"
         >
           <AccountCircle />
         </IconButton>
-        <p>Profile</p>
+        {user && <span onClick={handleLogout}>Log out</span>}
+        {!user && (
+          <Link
+            to="/login"
+            style={{ color: "inherit", textDecoration: "inherit" }}
+          >
+            Log In
+          </Link>
+        )}
       </MenuItem>
     </Menu>
   )

@@ -19,9 +19,21 @@ const columns = [
     width: 200,
   },
   {
-    field: "email",
-    headerName: "Email",
-    sortable: false,
+    field: "application_stage",
+    headerName: "Application Stage",
+    sortable: true,
+    width: 120,
+  },
+  {
+    field: "application_stage",
+    headerName: "Application Stage",
+    sortable: true,
+    width: 200,
+  },
+  {
+    field: "score",
+    headerName: "Assessment Score",
+    sortable: true,
     width: 200,
   },
 ]

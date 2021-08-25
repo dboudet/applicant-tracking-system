@@ -6,9 +6,9 @@ import { firebaseConfig } from "../config"
 import { useState } from "react"
 import { Box, Button, TextField, Typography } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
-import CloudUploadIcon from "@material-ui/icons/CloudUpload"
-import Rating from "@material-ui/lab/Rating"
 import AppStageStepper from "./AppStageStepper"
+import Rating from "@material-ui/lab/Rating"
+import CloudUploadIcon from "@material-ui/icons/CloudUpload"
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -24,6 +24,19 @@ const useStyles = makeStyles((theme) => ({
   textInput: {
     width: "70ch",
   },
+  photoUploadLabel: {
+    width: "50ch",
+    display: "flex",
+    justifyContent: "space-around",
+    alignItems: "center",
+  },
+  currentPhoto: {
+    width: "120px",
+    height: "120px",
+    objectFit: "cover",
+    objectPosition: "top",
+    borderRadius: "50%",
+  },
   uploadInput: {
     display: "none",
   },
@@ -31,7 +44,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function UpdateForm(props) {
   const classes = useStyles()
-
   const {
     id,
     first_name,
@@ -44,10 +56,10 @@ export default function UpdateForm(props) {
     application_stage,
   } = props.value
 
-  const [loading, setLoading] = useState(false)
   const [newFirstName, setNewFirstName] = useState(first_name)
   const [newLastName, setNewLastName] = useState(last_name)
   const [newEmail, setNewEmail] = useState(email)
+  const [isValidEmail, setIsValidEmail] = useState(true)
   const [newPosition, setNewPosition] = useState(position)
   const [newPhotoUrl, setNewPhotoUrl] = useState(photo_url)
   const [newNotes, setNewNotes] = useState(notes)
@@ -57,9 +69,7 @@ export default function UpdateForm(props) {
     useState(application_stage)
 
   const handlePhotoUpload = () => {
-    // reference file uploaded - with unique filename
     const uniqueFilename = require("unique-filename")
-    // const os = require("os")
     const mime = require("mime-types")
 
     // compile filename, extension, and metadata
@@ -78,7 +88,6 @@ export default function UpdateForm(props) {
     if (!firebase.apps.length) {
       firebase.initializeApp(firebaseConfig)
     }
-
     const storageRef = firebase.storage().ref()
     let selectedPhotoRef = storageRef.child(
       `app-tracking-system/photos/${selectedPhotoUniqueName}`
@@ -90,12 +99,26 @@ export default function UpdateForm(props) {
           setNewPhotoUrl(downloadURL)
         })
       })
-      .catch((err) => console.log(err))
+      .catch(() => alert("Image could not be uploaded. Files must be .jpg or .png and less than 1MB in size."))
+  }
+
+  const validateEmail = (inputEmail) => {
+    const re =
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    return re.test(String(inputEmail).toLowerCase())
   }
 
   const handleFormSubmit = (event) => {
     event.preventDefault()
-    setLoading(true)
+    if (
+      newFirstName === "" ||
+      newLastName === "" ||
+      isValidEmail === false ||
+      newPosition === ""
+    ) {
+      alert("Please fill out all required fields")
+      return
+    }
 
     const formData = {
       id: id,
@@ -117,30 +140,29 @@ export default function UpdateForm(props) {
       body: JSON.stringify(formData),
     })
       .then((response) => {
-        setLoading(false)
         response.json()
       })
       .then((data) => {
         alert("Applicant information has been successfully updated.")
       })
       .catch((err) => {
-        setLoading(false)
-        console.error(err)
+        alert("Error: unable to update applicant")
       })
   }
 
   return (
-    <form className={classes.root} noValidate autoComplete="off">
-      <label
-        htmlFor="photoUploadInput"
-        style={{
-          width: "50ch",
-          display: "flex",
-          justifyContent: "space-around",
-          alignItems: "center",
-        }}
-      >
-        <img src={newPhotoUrl} style={{ width: "100px", height: "100px" }} />
+    <form
+      className={classes.root}
+      noValidate
+      autoComplete="off"
+      onSubmit={handleFormSubmit}
+    >
+      <label htmlFor="photoUploadInput" className={classes.photoUploadLabel}>
+        <img
+          src={newPhotoUrl}
+          className={classes.currentPhoto}
+          alt="Current applicant headhshot"
+        />
         <Button
           variant="contained"
           color="primary"
@@ -175,11 +197,23 @@ export default function UpdateForm(props) {
       />
       <TextField
         className={classes.textInput}
-        required
         id="email"
         label="Email Address"
+        required
+        type="email"
         defaultValue={email}
-        onChange={(event) => setNewEmail(event.target.value)}
+        onChange={(event) => {
+          if (validateEmail(event.target.value) === false) {
+            setIsValidEmail(false)
+          } else {
+            setIsValidEmail(true)
+            setNewEmail(event.target.value)
+          }
+        }}
+        error={isValidEmail === false ? true : false}
+        helperText={
+          isValidEmail !== false ? null : "Please enter a valid email address."
+        }
       />
       <TextField
         className={classes.textInput}
@@ -214,10 +248,18 @@ export default function UpdateForm(props) {
         onChange={(event) => setNewNotes(event.target.value)}
       />
       <Button
-        onClick={handleFormSubmit}
+        type="submit"
         variant="contained"
         color="primary"
         size="large"
+        disabled={
+          newFirstName === "" ||
+          newLastName === "" ||
+          isValidEmail === false ||
+          newPosition === ""
+            ? true
+            : false
+        }
       >
         Save Changes
       </Button>

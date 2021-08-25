@@ -23,18 +23,31 @@ const useStyles = makeStyles((theme) => ({
   textInput: {
     width: "50ch",
   },
-  // uploadInput: {
-  //   display: "none",
-  // },
+  photoUploadLabel: {
+    width: "50ch",
+    display: "flex",
+    justifyContent: "space-around",
+    alignItems: "center",
+  },
+  currentPhoto: {
+    width: "120px",
+    height: "120px",
+    objectFit: "cover",
+    objectPosition: "top",
+    borderRadius: "50%",
+  },
+  uploadInput: {
+    display: "none",
+  },
 }))
 
 export default function AddApplicant() {
   const classes = useStyles()
 
-  const [loading, setLoading] = useState(false)
   const [firstName, setFirstName] = useState("")
   const [lastName, setLastName] = useState("")
   const [email, setEmail] = useState("")
+  const [isValidEmail, setIsValidEmail] = useState()
   const [position, setPosition] = useState("")
   const [photoUrl, setPhotoUrl] = useState(
     "http://dboudet-ats.s3-website-us-east-1.amazonaws.com/photo-placeholder.png"
@@ -66,7 +79,6 @@ export default function AddApplicant() {
     if (!firebase.apps.length) {
       firebase.initializeApp(firebaseConfig)
     }
-
     const storageRef = firebase.storage().ref()
     let selectedPhotoRef = storageRef.child(
       `app-tracking-system/photos/${selectedPhotoUniqueName}`
@@ -78,12 +90,26 @@ export default function AddApplicant() {
           setPhotoUrl(downloadURL)
         })
       })
-      .catch((err) => console.log(err))
+      .catch(() => alert("Image could not be uploaded. Files must be .jpg or .png and less than 1MB in size."))
+  }
+
+  const validateEmail = (inputEmail) => {
+    const regexEmailString =
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    return regexEmailString.test(String(inputEmail).toLowerCase())
   }
 
   const handleFormSubmit = (event) => {
     event.preventDefault()
-    setLoading(true)
+    if (
+      firstName === "" ||
+      lastName === "" ||
+      isValidEmail === false ||
+      position === ""
+    ) {
+      alert("Please fill out all required fields")
+      return
+    }
 
     const formData = {
       firstName: firstName,
@@ -103,16 +129,13 @@ export default function AddApplicant() {
       body: JSON.stringify(formData),
     })
       .then((response) => {
-        setLoading(false)
         response.json()
       })
       .then((data) => {
-        setLoading(false)
         alert("Applicant has been successfully added to the system")
       })
       .catch((err) => {
-        setLoading(false)
-        alert("Error creating applicant: ", err)
+        alert("Error: Unable to create applicant")
       })
   }
 
@@ -126,7 +149,30 @@ export default function AddApplicant() {
         >
           Add an Applicant
         </Typography>
-        <form className={classes.root} noValidate autoComplete="off">
+        <form
+          className={classes.root}
+          noValidate
+          autoComplete="off"
+          onSubmit={handleFormSubmit}
+        >
+          <label htmlFor="photoUploadInput" className={classes.photoUploadLabel}>
+            <img src={photoUrl} className={classes.currentPhoto} alt="Current applicant headshot" />
+            <Button
+              variant="contained"
+              color="primary"
+              component="span"
+              startIcon={<CloudUploadIcon />}
+            >
+              Upload Profile Photo
+            </Button>
+            <input
+              accept="image/*"
+              className={classes.uploadInput}
+              id="photoUploadInput"
+              type="file"
+              onChange={handlePhotoUpload}
+            />
+          </label>
           <TextField
             className={classes.textInput}
             required
@@ -143,10 +189,22 @@ export default function AddApplicant() {
           />
           <TextField
             className={classes.textInput}
-            required
             id="email"
             label="Email Address"
+            required
+            type="email"
             onChange={(event) => setEmail(event.target.value)}
+            onBlur={(event) => {
+              validateEmail(event.target.value) === true
+                ? setIsValidEmail(true)
+                : setIsValidEmail(false)
+            }}
+            error={isValidEmail === false ? true : false}
+            helperText={
+              isValidEmail !== false
+                ? null
+                : "Please enter a valid email address."
+            }
           />
           <TextField
             className={classes.textInput}
@@ -163,32 +221,19 @@ export default function AddApplicant() {
             defaultValue={notes}
             onChange={(event) => setNotes(event.target.value)}
           />
-          <label
-            htmlFor="photoUploadInput"
-            style={{
-              width: "50ch",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-around",
-              alignItems: "center",
-            }}
-          >
-            <Typography variant="body1" style={{ marginBottom: "12px" }}>
-              Please upload a photo/headshot, if available:
-            </Typography>
-            <input
-              accept="image/*"
-              className={classes.uploadInput}
-              id="photoUploadInput"
-              type="file"
-              onChange={handlePhotoUpload}
-            />
-          </label>
           <Button
-            onClick={handleFormSubmit}
+            type="submit"
             variant="contained"
             color="primary"
             size="large"
+            disabled={
+              firstName === "" ||
+              lastName === "" ||
+              isValidEmail === false ||
+              position === ""
+                ? true
+                : false
+            }
           >
             Add Applicant
           </Button>
