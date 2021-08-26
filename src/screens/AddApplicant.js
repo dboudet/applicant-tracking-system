@@ -6,7 +6,7 @@ import { firebaseConfig } from "../config"
 import { useState } from "react"
 import { Button, Paper, TextField, Typography } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
-import BreadcrumbsAppForm from "../components/BreadcrumbsAppForm"
+import BreadcrumbsAddForm from "../components/BreadcrumbsAddForm"
 import CloudUploadIcon from "@material-ui/icons/CloudUpload"
 
 const useStyles = makeStyles((theme) => ({
@@ -141,7 +141,7 @@ export default function AddApplicant() {
 
   return (
     <>
-      <BreadcrumbsAppForm />
+      <BreadcrumbsAddForm />
       <Paper>
         <Typography
           variant="h4"

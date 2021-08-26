@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
 import { Button, ButtonGroup, Link, Paper, Typography } from "@material-ui/core"
-import BreadcrumbsAppForm from "../components/BreadcrumbsAppForm"
+import BreadcrumbsUpdateForm from "../components/BreadcrumbsUpdateForm"
 import UpdateForm from "../components/UpdateForm"
 
 export default function UpdateApplicant() {
@@ -19,7 +19,7 @@ export default function UpdateApplicant() {
 
   return (
     <>
-      <BreadcrumbsAppForm />
+      <BreadcrumbsUpdateForm />
       <Paper>
         <Typography
           variant="h4"
@@ -38,7 +38,7 @@ export default function UpdateApplicant() {
               <Button>&laquo; Previous</Button>
             </Link>
           )}
-          {applicant?.id + 1 !== null && <Link href={"/applicants/update/" + (applicant.id + 1)}>
+          {(applicant.id + 1) !== null && <Link href={"/applicants/update/" + (applicant.id + 1)}>
             <Button>Next &raquo;</Button>
           </Link>}
         </ButtonGroup>

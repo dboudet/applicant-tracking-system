@@ -16,18 +16,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-export default function BreadcrumbsAppForm() {
+export default function BreadcrumbsAddForm() {
   const classes = useStyles()
 
   return (
     <Breadcrumbs aria-label="breadcrumb">
-      <Link color="inherit" href="/applicants-list" className={classes.link}>
+      <Link color="inherit" href="/" className={classes.link}>
         <PeopleIcon className={classes.icon} />
         All Applicants
       </Link>
       <Typography color="textPrimary">
         <PersonIcon className={classes.icon} />
-        Applicant Form
+        Add Applicant
       </Typography>
     </Breadcrumbs>
   )

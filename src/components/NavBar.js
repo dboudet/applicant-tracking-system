@@ -13,8 +13,9 @@ import {
   InputBase,
   MenuItem,
   Menu,
+  Badge,
 } from "@material-ui/core"
-import MoreIcon from "@material-ui/icons/MoreVert"
+import MenuIcon from "@material-ui/icons/Menu"
 import SearchIcon from "@material-ui/icons/Search"
 import AccountCircle from "@material-ui/icons/AccountCircle"
 
@@ -137,7 +138,31 @@ export default function NavBar({ user, setUser }) {
 
   const menuId = "primary-search-account-menu"
   const renderMenu = (
-    <Menu
+    <>
+      {/* <Menu
+        anchorEl={anchorEl}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        id={menuId}
+        keepMounted
+        transformOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <MenuItem>
+          {!user && (
+            <Link
+              to="/login"
+              style={{ color: "inherit", textDecoration: "inherit" }}
+            >
+              Log in <AccountCircle />
+            </Link>
+          )}
+          {user && (
+            <Link onClick={handleLogout}>
+              Log out <AccountCircle />
+            </Link>
+          )}
+        </MenuItem>
+      </Menu> */}
+      <Menu
       anchorEl={anchorEl}
       anchorOrigin={{ vertical: "top", horizontal: "right" }}
       id={menuId}
@@ -146,17 +171,20 @@ export default function NavBar({ user, setUser }) {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      {!user && <MenuItem onClick={handleMenuClose}>
-        <Link
-          to="/login"
-          style={{ color: "inherit", textDecoration: "inherit" }}
-        >
-          Log in
-        </Link>
-      </MenuItem>}
+      {!user && (
+        <MenuItem onClick={handleMenuClose}>
+          <Link
+            to="/login"
+            style={{ color: "inherit", textDecoration: "inherit" }}
+          >
+            Log in
+          </Link>
+        </MenuItem>
+      )}
 
       {user && <MenuItem onClick={handleLogout}>Log out</MenuItem>}
     </Menu>
+    </>
   )
 
   const mobileMenuId = "primary-search-account-menu-mobile"
@@ -197,15 +225,15 @@ export default function NavBar({ user, setUser }) {
       <CssBaseline />
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
-          {/* <IconButton
+          <IconButton
             edge="start"
             className={classes.menuButton}
             color="inherit"
             aria-label="open drawer"
           >
             <MenuIcon />
-          </IconButton> */}
-          <Typography className={classes.title} variant="h6" noWrap>
+          </IconButton>
+          <Typography className={classes.title} variant="h6" component="h1" noWrap>
             <Link to="/" className={classes.titleLink}>
               Applicant Tracking System
             </Link>
@@ -244,7 +272,7 @@ export default function NavBar({ user, setUser }) {
               onClick={handleMobileMenuOpen}
               color="inherit"
             >
-              <MoreIcon />
+              <AccountCircle />
             </IconButton>
           </div>
         </Toolbar>

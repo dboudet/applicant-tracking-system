@@ -2,7 +2,6 @@ import { useState, useEffect } from "react"
 import { Paper } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 import SingleApplicant from "../components/SingleApplicant"
-import BreadcrumbsList from "../components/BreadcrumbsList"
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -26,7 +25,6 @@ export default function MobileApplicantList() {
 
   return (
     <>
-      <BreadcrumbsList />
       {applicants?.map((applicant) => {
         return (
           <Paper className={classes.paper} elevation={4}>

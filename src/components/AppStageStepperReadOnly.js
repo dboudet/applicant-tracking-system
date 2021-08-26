@@ -6,9 +6,12 @@ import { Typography } from "@material-ui/core"
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: "70ch",
+    minWidth: "62ch",
     maxWidth: "100%",
+    labelContainer: {
+      color: "#cccccc",
   },
+  }
 }))
 
 function getSteps() {
@@ -21,7 +24,7 @@ function getSteps() {
   ]
 }
 
-export default function AppStageStepper({application_stage}) {
+export default function AppStageStepper({ application_stage }) {
   const classes = useStyles()
   const steps = getSteps()
 
@@ -30,7 +33,9 @@ export default function AppStageStepper({application_stage}) {
       <Stepper activeStep={application_stage} alternativeLabel>
         {steps.map((label) => (
           <Step key={label}>
-            <StepLabel><Typography variant="caption">{label}</Typography></StepLabel>
+            <StepLabel>
+              <Typography variant="caption">{label}</Typography>
+            </StepLabel>
           </Step>
         ))}
       </Stepper>

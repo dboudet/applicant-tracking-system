@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-export default function BreadcrumbsSingle() {
+export default function BreadcrumbsUpdateForm() {
   const classes = useStyles()
 
   return (
@@ -27,7 +27,7 @@ export default function BreadcrumbsSingle() {
       </Link>
       <Typography color="textPrimary">
         <PersonIcon className={classes.icon} />
-        Single Applicant
+        Update Applicant
       </Typography>
     </Breadcrumbs>
   )

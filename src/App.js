@@ -16,6 +16,7 @@ import AddApplicant from "./screens/AddApplicant"
 import UpdateApplicant from "./screens/UpdateApplicant"
 import Login from "./screens/Login"
 import "./App.css"
+import Home from "./screens/Home"
 
 const useStyles = makeStyles((theme) => ({
   main: {
@@ -56,10 +57,11 @@ export default function App() {
       <Router>
         <CssBaseline />
         <NavBar user={user} setUser={setUser} />
-        {!user && (
-          <div className={classes.main}>
-            <div className={classes.content}>
-              <Toolbar />
+        <div className={classes.main}>
+          {/* <SideDrawer /> */}
+          <div className={classes.content}>
+            <Toolbar />
+            {!user && (
               <Container maxWidth="lg" className={classes.container}>
                 <Switch>
                   <Route path="/*">
@@ -67,14 +69,8 @@ export default function App() {
                   </Route>
                 </Switch>
               </Container>
-            </div>
-          </div>
-        )}
-        {user && (
-          <div className={classes.main}>
-            <SideDrawer />
-            <div className={classes.content}>
-              <Toolbar />
+            )}
+            {user && (
               <Container
                 maxWidth="lg"
                 style={{ minHeight: "70vh", paddingTop: "20px" }}
@@ -102,13 +98,13 @@ export default function App() {
                     <Login user={user} setUser={setUser} />
                   </Route>
                   <Route path="/*">
-                  <ApplicantList />
+                    <Home />
                   </Route>
                 </Switch>
               </Container>
-            </div>
+            )}
           </div>
-        )}
+        </div>
         <Footer />
       </Router>
     </div>

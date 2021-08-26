@@ -7,14 +7,10 @@ import {
   ListItemAvatar,
   ListItemText,
   Avatar,
-  FormControlLabel,
-  Switch,
   Typography,
   Button,
   Paper,
-  Box,
 } from "@material-ui/core"
-import BreadcrumbsList from "../components/BreadcrumbsList"
 import AppStageSepperReadOnly from "../components/AppStageStepperReadOnly"
 import ApplicantPhoto from "./ApplicantPhoto"
 import EditIcon from "@material-ui/icons/Edit"
@@ -38,12 +34,18 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "flex-start",
     marginRight: "8px",
   },
+  listFirstCol: {
+    flexBasis: 200,
+    flexShrink: 0,
+  },
+  button: {
+    minWidth: "128px",
+  },
 }))
 
 export default function ApplicantList() {
   const classes = useStyles()
   const [applicants, setApplicants] = useState([])
-  const [showStage, setShowStage] = useState(true)
   const [editDisabled, setEditDisabled] = useState(false)
 
   useEffect(() => {
@@ -57,20 +59,6 @@ export default function ApplicantList() {
 
   return (
     <div className={classes.root}>
-      <Box className={classes.title}>
-        <BreadcrumbsList />
-        <FormControlLabel
-          control={
-            <Switch
-              checked={showStage}
-              onChange={(event) => setShowStage(event.target.checked)}
-              name="showStage"
-              color="primary"
-            />
-          }
-          label="Show Applicant Progress"
-        />
-      </Box>
       <div className={classes.applicantList}>
         <Paper>
           <List>
@@ -89,18 +77,17 @@ export default function ApplicantList() {
                   <ListItemText
                     primary={applicant.first_name + " " + applicant.last_name}
                     secondary={applicant.email}
-                    style={{ flexBasis: 150 }}
+                    className={classes.listFirstCol}
                   />
-                  <Typography style={{ flexBasis: 180, flexGrow: 1 }}>
+                  <Typography style={{ flexBasis: 170, flexGrow: 1 }}>
                     {applicant.position}
                   </Typography>
-                  {showStage ? (
-                    <AppStageSepperReadOnly
-                      key={applicant.id}
-                      application_stage={applicant.application_stage}
-                    />
-                  ) : null}
+                  <AppStageSepperReadOnly
+                    key={applicant.id}
+                    application_stage={applicant.application_stage}
+                  />
                   <Button
+                    variant="outlined"
                     color="primary"
                     size="small"
                     className={classes.button}
