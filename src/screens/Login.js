@@ -23,8 +23,8 @@ const useStyles = makeStyles((theme) => ({
   //     justifyContent: "center",
   //   },
   paper: {
-    minWidth: "70ch",
-    maxWidth: "90%",
+    minWidth: "60ch",
+    maxWidth: "90vw",
   },
   loginForm: {
     "& > *": {
@@ -34,6 +34,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
+    maxWidth: "100vw",
   },
   textInput: {
     width: "50ch",
@@ -79,7 +80,7 @@ export default function Login({ user, setUser }) {
         // localStorage.setItem("user", JSON.stringify(firebaseUser))
         setUser(firebaseUser)
         console.log(firebaseUser)
-        history.push("/applicants-list")
+        history.push("/")
         alert("Welcome! You are now signed in.")
       })
       .catch((err) => {
@@ -91,7 +92,7 @@ export default function Login({ user, setUser }) {
     <div className={classes.root}>
       <Paper className={classes.paper}>
         <Typography
-          variant="h4"
+          variant="h5"
           style={{ textAlign: "center", paddingTop: 20 }}
         >
           Please log in to view applicants
@@ -113,7 +114,7 @@ export default function Login({ user, setUser }) {
               testValidEmail(event.target.value) ? setEmailError(false) : setEmailError(true)
             }
             error={emailError}
-            helperText={emailError ? "Please enter a valid email address." : null}
+            helpertext={emailError ? "Please enter a valid email address." : null}
           />
           <FormControl className={classes.textInput}>
             <InputLabel htmlFor="password">Password</InputLabel>
@@ -128,7 +129,7 @@ export default function Login({ user, setUser }) {
                   : setPasswordError(false)
               }
               error={passwordError}
-              helperText={passwordError ? "Please enter your password." : null}
+              helpertext={passwordError ? "Please enter your password." : null}
               onChange={(event) => setPassword(event.target.value)}
               endAdornment={
                 <InputAdornment position="end">

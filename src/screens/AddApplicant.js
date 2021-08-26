@@ -147,7 +147,7 @@ export default function AddApplicant() {
           variant="h4"
           style={{ textAlign: "center", paddingTop: 20 }}
         >
-          Add an Applicant
+          Add New Applicant
         </Typography>
         <form
           className={classes.root}
@@ -200,7 +200,7 @@ export default function AddApplicant() {
                 : setIsValidEmail(false)
             }}
             error={isValidEmail === false ? true : false}
-            helperText={
+            helpertext={
               isValidEmail !== false
                 ? null
                 : "Please enter a valid email address."

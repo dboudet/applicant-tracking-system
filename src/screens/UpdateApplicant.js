@@ -31,15 +31,15 @@ export default function UpdateApplicant() {
         <ButtonGroup
           style={{ display: "flex", justifyContent: "space-around" }}
           color="primary"
-          aria-label="outlined primary button group"
+          aria-label="primary button group"
         >
           {applicant.id > 1 && (
             <Link href={"/applicants/update/" + (applicant.id - 1)}>
-              <Button>&laquo; Previous</Button>
+              <Button>&laquo; Previous Applicant</Button>
             </Link>
           )}
           {(applicant.id + 1) !== null && <Link href={"/applicants/update/" + (applicant.id + 1)}>
-            <Button>Next &raquo;</Button>
+            <Button>Next Applicant &raquo;</Button>
           </Link>}
         </ButtonGroup>
       </Paper>

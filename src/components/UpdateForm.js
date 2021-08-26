@@ -211,7 +211,7 @@ export default function UpdateForm(props) {
           }
         }}
         error={isValidEmail === false ? true : false}
-        helperText={
+        helpertext={
           isValidEmail !== false ? null : "Please enter a valid email address."
         }
       />

@@ -5,7 +5,6 @@ import { useState } from "react"
 import { Link, useHistory } from "react-router-dom"
 import { alpha, makeStyles } from "@material-ui/core/styles"
 import {
-  CssBaseline,
   AppBar,
   Toolbar,
   IconButton,
@@ -13,16 +12,16 @@ import {
   InputBase,
   MenuItem,
   Menu,
-  Badge,
+  Button,
 } from "@material-ui/core"
 import MenuIcon from "@material-ui/icons/Menu"
 import SearchIcon from "@material-ui/icons/Search"
 import AccountCircle from "@material-ui/icons/AccountCircle"
 
 const useStyles = makeStyles((theme) => ({
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-  },
+  // appBar: {
+  //   zIndex: theme.zIndex.drawer + 1,
+  // },
   grow: {
     flexGrow: 1,
   },
@@ -35,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
       display: "block",
     },
   },
-  titleLink: {
+  normalizeLink: {
     color: "inherit",
     textDecoration: "none",
   },
@@ -95,26 +94,21 @@ export default function NavBar({ user, setUser }) {
   const history = useHistory()
 
   const [anchorEl, setAnchorEl] = useState(null)
+  const [primaryAnchorEl, setPrimaryAnchorEl] = useState(null)
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null)
   const isMenuOpen = Boolean(anchorEl)
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl)
 
-  const handleProfileMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget)
-  }
-
-  const handleMobileMenuClose = () => {
-    setMobileMoreAnchorEl(null)
-  }
-
+  const handleProfileMenuOpen = (event) => setAnchorEl(event.currentTarget)
+  const handleMobileMenuClose = () => setMobileMoreAnchorEl(null)
   const handleMenuClose = () => {
     setAnchorEl(null)
     handleMobileMenuClose()
   }
-
-  const handleMobileMenuOpen = (event) => {
+  const handleMobileMenuOpen = (event) =>
     setMobileMoreAnchorEl(event.currentTarget)
-  }
+  const handleClick = (event) => setPrimaryAnchorEl(event.currentTarget)
+  const handleClose = () => setPrimaryAnchorEl(null)
 
   const handleLogout = () => {
     setAnchorEl(null)
@@ -139,51 +133,28 @@ export default function NavBar({ user, setUser }) {
   const menuId = "primary-search-account-menu"
   const renderMenu = (
     <>
-      {/* <Menu
+      <Menu
         anchorEl={anchorEl}
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
         id={menuId}
         keepMounted
         transformOrigin={{ vertical: "top", horizontal: "right" }}
+        open={isMenuOpen}
+        onClose={handleMenuClose}
       >
-        <MenuItem>
-          {!user && (
+        {!user && (
+          <MenuItem onClick={handleMenuClose}>
             <Link
               to="/login"
-              style={{ color: "inherit", textDecoration: "inherit" }}
+              className={classes.normalizeLink}
             >
-              Log in <AccountCircle />
+              Log in
             </Link>
-          )}
-          {user && (
-            <Link onClick={handleLogout}>
-              Log out <AccountCircle />
-            </Link>
-          )}
-        </MenuItem>
-      </Menu> */}
-      <Menu
-      anchorEl={anchorEl}
-      anchorOrigin={{ vertical: "top", horizontal: "right" }}
-      id={menuId}
-      keepMounted
-      transformOrigin={{ vertical: "top", horizontal: "right" }}
-      open={isMenuOpen}
-      onClose={handleMenuClose}
-    >
-      {!user && (
-        <MenuItem onClick={handleMenuClose}>
-          <Link
-            to="/login"
-            style={{ color: "inherit", textDecoration: "inherit" }}
-          >
-            Log in
-          </Link>
-        </MenuItem>
-      )}
+          </MenuItem>
+        )}
 
-      {user && <MenuItem onClick={handleLogout}>Log out</MenuItem>}
-    </Menu>
+        {user && <MenuItem onClick={handleLogout}>Log out</MenuItem>}
+      </Menu>
     </>
   )
 
@@ -211,7 +182,7 @@ export default function NavBar({ user, setUser }) {
         {!user && (
           <Link
             to="/login"
-            style={{ color: "inherit", textDecoration: "inherit" }}
+            className={classes.normalizeLink}
           >
             Log In
           </Link>
@@ -222,19 +193,40 @@ export default function NavBar({ user, setUser }) {
 
   return (
     <div className={classes.grow}>
-      <CssBaseline />
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
-          <IconButton
+          {/* {user && <IconButton
             edge="start"
             className={classes.menuButton}
             color="inherit"
             aria-label="open drawer"
+            onClick={handleClick}
           >
             <MenuIcon />
-          </IconButton>
-          <Typography className={classes.title} variant="h6" component="h1" noWrap>
-            <Link to="/" className={classes.titleLink}>
+          </IconButton>}
+          {user && <Menu
+            id="main-nav-menu"
+            anchorEl={primaryAnchorEl}
+            keepMounted
+            open={Boolean(primaryAnchorEl)}
+            onClose={handleClose}
+          >
+            <MenuItem onClick={handleClose}>
+              <Link
+                to="/add-new-applicant"
+                className={classes.normalizeLink}
+              >
+                Add Applicant
+              </Link>
+            </MenuItem>
+          </Menu>} */}
+          <Typography
+            className={classes.title}
+            variant="h6"
+            component="h1"
+            noWrap
+          >
+            <Link to="/" className={classes.normalizeLink}>
               Applicant Tracking System
             </Link>
           </Typography>
@@ -253,16 +245,28 @@ export default function NavBar({ user, setUser }) {
           </div>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-            <IconButton
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>
+            {!user && (
+              <Button
+                onClick={handleLogout}
+                startIcon={<AccountCircle />}
+              >
+                <Link
+                  to="/login"
+                  className={classes.normalizeLink}
+                >
+                  Log in
+                </Link>
+              </Button>
+            )}
+            {user && (
+              <Button
+                onClick={handleLogout}
+                className={classes.normalizeLink}
+                startIcon={<AccountCircle />}
+              >
+                Log out
+              </Button>
+            )}
           </div>
           <div className={classes.sectionMobile}>
             <IconButton
