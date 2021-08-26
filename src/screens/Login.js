@@ -2,17 +2,22 @@ import firebase from "firebase/app"
 import "firebase/auth"
 import { firebaseConfig } from "../config"
 
-import { useState } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useHistory } from "react-router-dom"
-import IconButton from "@material-ui/core/IconButton"
-import Input from "@material-ui/core/Input"
-import InputLabel from "@material-ui/core/InputLabel"
-import InputAdornment from "@material-ui/core/InputAdornment"
-import FormControl from "@material-ui/core/FormControl"
-import TextField from "@material-ui/core/TextField"
+import {
+  Button,
+  Fade,
+  FormControl,
+  IconButton,
+  Input,
+  InputLabel,
+  InputAdornment,
+  Paper,
+  TextField,
+  Typography,
+} from "@material-ui/core"
 import Visibility from "@material-ui/icons/Visibility"
 import VisibilityOff from "@material-ui/icons/VisibilityOff"
-import { Button, Paper, Typography } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 
 const useStyles = makeStyles((theme) => ({
@@ -50,8 +55,9 @@ export default function Login({ user, setUser }) {
   const [showPassword, setShowPassword] = useState(false)
   const [emailError, setEmailError] = useState(false)
   const [passwordError, setPasswordError] = useState(false)
-  const [loading, setLoading] = useState(false)
-
+  const timerRef = useRef()
+  
+  useEffect(() => () => clearTimeout(timerRef.current), [])
   const handleClickShowPassword = () => setShowPassword(!showPassword)
   const handleMouseDownPassword = (event) => event.preventDefault()
 
@@ -90,71 +96,85 @@ export default function Login({ user, setUser }) {
 
   return (
     <div className={classes.root}>
-      <Paper className={classes.paper}>
-        <Typography
-          variant="h5"
-          style={{ textAlign: "center", paddingTop: 20 }}
-        >
-          Please log in to view applicants
-        </Typography>
-        <form
-          className={classes.loginForm}
-          noValidate
-          autoComplete="off"
-          onSubmit={handleFormSubmit}
-        >
-          <TextField
-            className={classes.textInput}
-            id="email"
-            label="Email Address"
-            required
-            type="email"
-            onChange={(event) => setEmail(event.target.value)}
-            onBlur={(event) =>
-              testValidEmail(event.target.value) ? setEmailError(false) : setEmailError(true)
-            }
-            error={emailError}
-            helpertext={emailError ? "Please enter a valid email address." : null}
-          />
-          <FormControl className={classes.textInput}>
-            <InputLabel htmlFor="password">Password</InputLabel>
-            <Input
-              id="password"
-              label="Password"
+      <Fade
+        in={true}
+        style={{
+          transitionDelay:"500ms",
+        }}
+        unmountOnExit
+      >
+        <Paper className={classes.paper}>
+          <Typography
+            variant="h5"
+            style={{ textAlign: "center", paddingTop: 20 }}
+          >
+            Please log in to view applicants
+          </Typography>
+          <form
+            className={classes.loginForm}
+            noValidate
+            autoComplete="off"
+            onSubmit={handleFormSubmit}
+          >
+            <TextField
+              className={classes.textInput}
+              id="email"
+              label="Email Address"
               required
-              type={showPassword ? "text" : "password"}
+              type="email"
+              onChange={(event) => setEmail(event.target.value)}
               onBlur={(event) =>
-                !event.target.value
-                  ? setPasswordError(true)
-                  : setPasswordError(false)
+                testValidEmail(event.target.value)
+                  ? setEmailError(false)
+                  : setEmailError(true)
               }
-              error={passwordError}
-              helpertext={passwordError ? "Please enter your password." : null}
-              onChange={(event) => setPassword(event.target.value)}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
-                  >
-                    {showPassword ? <Visibility /> : <VisibilityOff />}
-                  </IconButton>
-                </InputAdornment>
+              error={emailError}
+              helpertext={
+                emailError ? "Please enter a valid email address." : null
               }
             />
-          </FormControl>
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            size="large"
-            disabled={email === false || password === false ? true : false}
-          >
-            Log in
-          </Button>
-        </form>
-      </Paper>
+            <FormControl className={classes.textInput}>
+              <InputLabel htmlFor="password">Password</InputLabel>
+              <Input
+                id="password"
+                label="Password"
+                required
+                type={showPassword ? "text" : "password"}
+                onBlur={(event) =>
+                  !event.target.value
+                    ? setPasswordError(true)
+                    : setPasswordError(false)
+                }
+                error={passwordError}
+                helpertext={
+                  passwordError ? "Please enter your password." : null
+                }
+                onChange={(event) => setPassword(event.target.value)}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                    >
+                      {showPassword ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+              />
+            </FormControl>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              size="large"
+              disabled={email === false || password === false ? true : false}
+            >
+              Log in
+            </Button>
+          </form>
+        </Paper>
+      </Fade>
     </div>
   )
 }

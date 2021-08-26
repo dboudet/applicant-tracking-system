@@ -61,19 +61,10 @@ export default function App() {
           {/* <SideDrawer /> */}
           <div className={classes.content}>
             <Toolbar />
-            {!user && (
-              <Container maxWidth="lg" className={classes.container}>
-                <Switch>
-                  <Route path="/*">
-                    <Login user={user} setUser={setUser} />
-                  </Route>
-                </Switch>
-              </Container>
-            )}
             {user && (
               <Container
-                maxWidth="lg"
-                style={{ minHeight: "70vh", paddingTop: "20px" }}
+              maxWidth="lg"
+              style={{ minHeight: "70vh", paddingTop: "20px" }}
               >
                 <Switch>
                   <Route exact path="/applicants/update/:applicantId">
@@ -99,6 +90,15 @@ export default function App() {
                   </Route>
                   <Route path="/*">
                     <Home />
+                  </Route>
+                </Switch>
+              </Container>
+            )}
+            {!user && (
+              <Container maxWidth="lg" className={classes.container}>
+                <Switch>
+                  <Route path="/*">
+                    <Login user={user} setUser={setUser} />
                   </Route>
                 </Switch>
               </Container>

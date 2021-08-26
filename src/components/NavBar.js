@@ -1,7 +1,7 @@
 import firebase from "firebase"
 import "firebase/auth"
 import { firebaseConfig } from "../config"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Link, useHistory } from "react-router-dom"
 import { alpha, makeStyles } from "@material-ui/core/styles"
 import {
@@ -13,7 +13,9 @@ import {
   MenuItem,
   Menu,
   Button,
+  TextField,
 } from "@material-ui/core"
+import Autocomplete from "@material-ui/lab/Autocomplete"
 import MenuIcon from "@material-ui/icons/Menu"
 import SearchIcon from "@material-ui/icons/Search"
 import AccountCircle from "@material-ui/icons/AccountCircle"
@@ -64,6 +66,7 @@ const useStyles = makeStyles((theme) => ({
   },
   inputRoot: {
     color: "inherit",
+    minWidth: 320,
   },
   inputInput: {
     padding: theme.spacing(1, 1, 1, 0),
@@ -71,9 +74,9 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
     transition: theme.transitions.create("width"),
     width: "100%",
-    [theme.breakpoints.up("md")]: {
-      width: "20ch",
-    },
+    // [theme.breakpoints.up("md")]: {
+    //   width: "20ch",
+    // },
   },
   sectionDesktop: {
     display: "none",
@@ -93,6 +96,9 @@ export default function NavBar({ user, setUser }) {
   const classes = useStyles()
   const history = useHistory()
 
+  const [applicantSearchResults, setApplicantSearchResults] = useState([])
+  const [searchQuery, setSearchQuery] = useState("")
+  const [selectedApplicant, setSelectedApplicant] = useState(null)
   const [anchorEl, setAnchorEl] = useState(null)
   const [primaryAnchorEl, setPrimaryAnchorEl] = useState(null)
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null)
@@ -144,10 +150,7 @@ export default function NavBar({ user, setUser }) {
       >
         {!user && (
           <MenuItem onClick={handleMenuClose}>
-            <Link
-              to="/login"
-              className={classes.normalizeLink}
-            >
+            <Link to="/login" className={classes.normalizeLink}>
               Log in
             </Link>
           </MenuItem>
@@ -180,16 +183,50 @@ export default function NavBar({ user, setUser }) {
         </IconButton>
         {user && <span onClick={handleLogout}>Log out</span>}
         {!user && (
-          <Link
-            to="/login"
-            className={classes.normalizeLink}
-          >
+          <Link to="/login" className={classes.normalizeLink}>
             Log In
           </Link>
         )}
       </MenuItem>
     </Menu>
   )
+
+  // const populateSearchOptions = () => {
+  //   fetch(`${process.env.REACT_APP_API_ENDPOINT}/ats/applicants`)
+  //   .then((response) => response.json())
+  //   .then((data) => {
+  //     setApplicantSearchResults(data)
+  //   })
+  //   .catch((err) => console.error(err))
+  // }
+
+  useEffect(() => {
+    fetch(`${process.env.REACT_APP_API_ENDPOINT}/ats/search/${searchQuery}`)
+      .then((response) => response.json())
+      .then((data) => {
+        setApplicantSearchResults(data)
+      })
+      .catch((err) => console.error(err))
+  }, [searchQuery])
+
+  // const applicantSearchResults = [
+  //   {
+  //     first_name: "Dan",
+  //     last_name: "Boudet",
+  //   },
+  //   {
+  //     first_name: "Danny",
+  //     last_name: "Boudet",
+  //   },
+  //   {
+  //     first_name: "Chris",
+  //     last_name: "De Leon",
+  //   },
+  //   {
+  //     first_name: "Luiz",
+  //     last_name: "Silva",
+  //   },
+  // ]
 
   return (
     <div className={classes.grow}>
@@ -230,30 +267,56 @@ export default function NavBar({ user, setUser }) {
               Applicant Tracking System
             </Link>
           </Typography>
-          <div className={classes.search}>
+          {user && (<div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
             </div>
-            <InputBase
-              placeholder="Search…"
+            <Autocomplete
+              id="applicant-search"
+              clearOnBlur={true}
+              clearOnEscape={true}
+              noOptionsText="Start typing..."
+              options={applicantSearchResults}
+              getOptionLabel={(applicant) => {
+                setSelectedApplicant(applicant.id)
+                return `${applicant.first_name} ${applicant.last_name}`
+              }}
+              getOptionSelected={(event) => {
+                console.log(selectedApplicant)
+                history.push(`/view-applicant/${selectedApplicant}`)
+              }}
+              className={classes.inputRoot}
+              onClose={() => history.push("/")}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  placeholder="Search applicants by name"
+                  // onFocus={populateSearchOptions}
+                  onBlur={(event) => setSearchQuery("")}
+                  onChange={(event) =>
+                    setSearchQuery(
+                      event.target.value.replace(/[^a-zA-Z0-9]/g, "")
+                    )
+                  }
+                  className={classes.inputInput}
+                />
+              )}
+            />
+            {/* <InputBase
+              placeholder="Search Applicants…"
+              inputProps={{ "aria-label": "search" }}
+              onChange={(event) => setSearchQuery(event.target.value)}
               classes={{
                 root: classes.inputRoot,
                 input: classes.inputInput,
               }}
-              inputProps={{ "aria-label": "search" }}
-            />
-          </div>
+                    /> */}
+          </div>)}
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
             {!user && (
-              <Button
-                onClick={handleLogout}
-                startIcon={<AccountCircle />}
-              >
-                <Link
-                  to="/login"
-                  className={classes.normalizeLink}
-                >
+              <Button onClick={handleLogout} startIcon={<AccountCircle />}>
+                <Link to="/login" className={classes.normalizeLink}>
                   Log in
                 </Link>
               </Button>
