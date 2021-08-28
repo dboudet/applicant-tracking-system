@@ -9,14 +9,12 @@ import {
   Toolbar,
   IconButton,
   Typography,
-  InputBase,
   MenuItem,
   Menu,
   Button,
   TextField,
 } from "@material-ui/core"
 import Autocomplete from "@material-ui/lab/Autocomplete"
-import MenuIcon from "@material-ui/icons/Menu"
 import SearchIcon from "@material-ui/icons/Search"
 import AccountCircle from "@material-ui/icons/AccountCircle"
 
@@ -113,8 +111,6 @@ export default function NavBar({ user, setUser }) {
   }
   const handleMobileMenuOpen = (event) =>
     setMobileMoreAnchorEl(event.currentTarget)
-  const handleClick = (event) => setPrimaryAnchorEl(event.currentTarget)
-  const handleClose = () => setPrimaryAnchorEl(null)
 
   const handleLogout = () => {
     setAnchorEl(null)
@@ -129,11 +125,9 @@ export default function NavBar({ user, setUser }) {
         // Sign-out successful.
         setUser(false)
         // localStorage.removeItem("user")
-        history.push("/login")
+        history.push("/")
       })
-      .catch((error) => {
-        // An error happened.
-      })
+      .catch((error) => {})
   }
 
   const menuId = "primary-search-account-menu"
@@ -191,42 +185,23 @@ export default function NavBar({ user, setUser }) {
     </Menu>
   )
 
-  // const populateSearchOptions = () => {
-  //   fetch(`${process.env.REACT_APP_API_ENDPOINT}/ats/applicants`)
-  //   .then((response) => response.json())
-  //   .then((data) => {
-  //     setApplicantSearchResults(data)
-  //   })
-  //   .catch((err) => console.error(err))
-  // }
-
-  useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_ENDPOINT}/ats/search/${searchQuery}`)
+  const populateSearchOptions = () => {
+    fetch(`${process.env.REACT_APP_API_ENDPOINT}/ats/applicants`)
       .then((response) => response.json())
       .then((data) => {
         setApplicantSearchResults(data)
       })
       .catch((err) => console.error(err))
-  }, [searchQuery])
+  }
 
-  // const applicantSearchResults = [
-  //   {
-  //     first_name: "Dan",
-  //     last_name: "Boudet",
-  //   },
-  //   {
-  //     first_name: "Danny",
-  //     last_name: "Boudet",
-  //   },
-  //   {
-  //     first_name: "Chris",
-  //     last_name: "De Leon",
-  //   },
-  //   {
-  //     first_name: "Luiz",
-  //     last_name: "Silva",
-  //   },
-  // ]
+  // useEffect(() => {
+  //   fetch(`${process.env.REACT_APP_API_ENDPOINT}/ats/search/${searchQuery}`)
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       setApplicantSearchResults(data)
+  //     })
+  //     .catch((err) => console.error(err))
+  // }, [searchQuery])
 
   return (
     <div className={classes.grow}>
@@ -267,42 +242,43 @@ export default function NavBar({ user, setUser }) {
               Applicant Tracking System
             </Link>
           </Typography>
-          {user && (<div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
-            </div>
-            <Autocomplete
-              id="applicant-search"
-              clearOnBlur={true}
-              clearOnEscape={true}
-              noOptionsText="Start typing..."
-              options={applicantSearchResults}
-              getOptionLabel={(applicant) => {
-                setSelectedApplicant(applicant.id)
-                return `${applicant.first_name} ${applicant.last_name}`
-              }}
-              getOptionSelected={(event) => {
-                console.log(selectedApplicant)
-                history.push(`/view-applicant/${selectedApplicant}`)
-              }}
-              className={classes.inputRoot}
-              onClose={() => history.push("/")}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  placeholder="Search applicants by name"
-                  // onFocus={populateSearchOptions}
-                  onBlur={(event) => setSearchQuery("")}
-                  onChange={(event) =>
-                    setSearchQuery(
-                      event.target.value.replace(/[^a-zA-Z0-9]/g, "")
-                    )
-                  }
-                  className={classes.inputInput}
-                />
-              )}
-            />
-            {/* <InputBase
+          {user && (
+            <div className={classes.search}>
+              <div className={classes.searchIcon}>
+                <SearchIcon />
+              </div>
+              <Autocomplete
+                id="applicant-search"
+                clearOnBlur={true}
+                clearOnEscape={true}
+                noOptionsText="Start typing..."
+                options={applicantSearchResults}
+                getOptionLabel={(applicant) => {
+                  setSelectedApplicant(applicant.id)
+                  return `${applicant.first_name} ${applicant.last_name}`
+                }}
+                getOptionSelected={(event) => {
+                  // console.log(selectedApplicant)
+                  history.push(`/view-applicant/${selectedApplicant}`)
+                }}
+                className={classes.inputRoot}
+                onClose={() => history.push("/")}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    placeholder="Search applicants by name"
+                    onFocus={populateSearchOptions}
+                    onBlur={(event) => setSearchQuery("")}
+                    onChange={(event) =>
+                      setSearchQuery(
+                        event.target.value.replace(/[^a-zA-Z0-9]/g, "")
+                      )
+                    }
+                    className={classes.inputInput}
+                  />
+                )}
+              />
+              {/* <InputBase
               placeholder="Search Applicants…"
               inputProps={{ "aria-label": "search" }}
               onChange={(event) => setSearchQuery(event.target.value)}
@@ -311,15 +287,16 @@ export default function NavBar({ user, setUser }) {
                 input: classes.inputInput,
               }}
                     /> */}
-          </div>)}
+            </div>
+          )}
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
             {!user && (
-              <Button onClick={handleLogout} startIcon={<AccountCircle />}>
-                <Link to="/login" className={classes.normalizeLink}>
+              <Link to="/" className={classes.normalizeLink}>
+                <Button onClick={handleLogout} startIcon={<AccountCircle />} className={classes.normalizeLink}>
                   Log in
-                </Link>
-              </Button>
+                </Button>
+              </Link>
             )}
             {user && (
               <Button

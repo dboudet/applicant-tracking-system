@@ -1,15 +1,16 @@
-import { Link } from "react-router-dom"
+import { Link } from "@material-ui/core"
 import { Grid, Typography, Box, Button } from "@material-ui/core"
 import Rating from "@material-ui/lab/Rating"
 import { makeStyles } from "@material-ui/core/styles"
 import EditIcon from "@material-ui/icons/Edit"
 import AppStageSepperReadOnly from "../components/AppStageStepperReadOnly"
+import { PictureAsPdf } from "@material-ui/icons"
 
 const useStyles = makeStyles((theme) => ({
   gridColumn: {
     display: "flex",
     flexDirection: "column",
-    justifyContent: "space-between",
+    justifyContent: "flex-start",
     alignItems: "center",
     minHeight: 320,
     textAlign: "center",
@@ -27,15 +28,22 @@ export default function SingleApplicant({ applicant }) {
           alt={`${applicant.first_name} ${applicant.last_name}`}
           width="150"
           height="150"
-          style={{ borderRadius: "50%", maxWidth: "100%", objectFit:"cover", objectPosition:"top" }}
+          style={{
+            borderRadius: "50%",
+            maxWidth: "100%",
+            objectFit: "cover",
+            objectPosition: "top",
+          }}
         />
         <Typography
           variant="h5"
           component="h2"
         >{`${applicant.first_name} ${applicant.last_name}`}</Typography>
-        <Typography variant="subtitle2">{applicant.email}</Typography>
+        <Typography variant="subtitle2" style={{ margin: "6px 0 20px 0" }}>
+          {applicant.email}
+        </Typography>
         <Link
-          to={`/applicants/update/${applicant.id}`}
+          href={`/applicants/update/${applicant.id}`}
           style={{ color: "inherit", textDecoration: "inherit" }}
         >
           <Button variant="contained" color="primary" size="large">
@@ -53,9 +61,23 @@ export default function SingleApplicant({ applicant }) {
           <Typography component="legend">Assessment Score</Typography>
           <Rating name="Applicant Score" value={applicant.score} readOnly />
         </Box>
+        <Link
+          href={applicant.resume_url}
+          target="_blank"
+          style={{ color: "inherit", textDecoration: "inherit" }}
+        >
+          <Button
+            variant="contained"
+            color="primary"
+            size="large"
+            startIcon={<PictureAsPdf />}
+          >
+            Resume
+          </Button>
+        </Link>
         {applicant.notes && (
-          <Typography variant="body1">
-            Notes:
+          <Typography variant="body1" style={{ marginTop: 24 }}>
+            <strong>Notes:</strong>
             <br />
             {applicant.notes}
           </Typography>

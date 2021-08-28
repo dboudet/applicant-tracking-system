@@ -4,7 +4,14 @@ import "firebase/storage"
 import { firebaseConfig } from "../config"
 
 import { useState } from "react"
-import { Button, Paper, TextField, Typography } from "@material-ui/core"
+import {
+  Button,
+  CircularProgress,
+  Paper,
+  TextField,
+  Typography,
+} from "@material-ui/core"
+import { useHistory } from "react-router-dom"
 import { makeStyles } from "@material-ui/core/styles"
 import BreadcrumbsAddForm from "../components/BreadcrumbsAddForm"
 import CloudUploadIcon from "@material-ui/icons/CloudUpload"
@@ -23,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
   textInput: {
     width: "50ch",
   },
-  photoUploadLabel: {
+  fileUploadLabel: {
     width: "50ch",
     display: "flex",
     justifyContent: "space-around",
@@ -43,6 +50,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function AddApplicant() {
   const classes = useStyles()
+  const history = useHistory()
 
   const [firstName, setFirstName] = useState("")
   const [lastName, setLastName] = useState("")
@@ -55,11 +63,19 @@ export default function AddApplicant() {
   const [resumeUrl, setResumeUrl] = useState(
     "https://firebasestorage.googleapis.com/v0/b/dan-boudet-com.appspot.com/o/app-tracking-system%2Fresumes%2Fmissing-resume.pdf?alt=media&token=78eacbf8-4b92-4070-8534-804a1284c6c4"
   )
+  const [resumePath, setResumePath] = useState("")
   const [notes, setNotes] = useState("")
   const [score, setScore] = useState(0)
   const [applicationStage, setApplicationStage] = useState(0)
+  const [photoLoading, setPhotoLoading] = useState(false)
+  const [resumeLoading, setResumeLoading] = useState(false)
+
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig)
+  }
 
   const handlePhotoUpload = () => {
+    setPhotoLoading(true)
     const uniqueFilename = require("unique-filename")
     const mime = require("mime-types")
 
@@ -76,9 +92,6 @@ export default function AddApplicant() {
     // console.log(selectedPhotoUniqueName)
 
     // upload to Firebase
-    if (!firebase.apps.length) {
-      firebase.initializeApp(firebaseConfig)
-    }
     const storageRef = firebase.storage().ref()
     let selectedPhotoRef = storageRef.child(
       `app-tracking-system/photos/${selectedPhotoUniqueName}`
@@ -88,9 +101,57 @@ export default function AddApplicant() {
       .then(() => {
         selectedPhotoRef.getDownloadURL().then((downloadURL) => {
           setPhotoUrl(downloadURL)
+          setPhotoLoading(false)
         })
       })
-      .catch(() => alert("Image could not be uploaded. Files must be .jpg or .png and less than 1MB in size."))
+      .catch(() => {
+        setPhotoLoading(false)
+        alert(
+          "Image could not be uploaded. Files must be .jpg or .png and less than 2MB in size."
+        )
+      })
+  }
+
+  const handleResumeUpload = () => {
+    setResumeLoading(true)
+    const uniqueFilename = require("unique-filename")
+    const mime = require("mime-types")
+
+    // compile filename, extension, and metadata
+    let selectedResume = document.getElementById("resumeUploadInput").files[0]
+    if (selectedResume !== undefined) {
+      setResumePath(selectedResume.name, selectedResume.type)
+    } else return
+
+    let metadata = {
+      contentType: selectedResume.type,
+    }
+    let selectedResumeExtension = mime.extension(selectedResume.type)
+    let selectedResumeUniqueName =
+      uniqueFilename("", "resume", selectedResume.name) +
+      "." +
+      selectedResumeExtension
+    // console.log(selectedResumeUniqueName)
+
+    // upload to Firebase
+    const storageRef = firebase.storage().ref()
+    let selectedResumeRef = storageRef.child(
+      `app-tracking-system/resumes/${selectedResumeUniqueName}`
+    )
+    selectedResumeRef
+      .put(selectedResume, metadata)
+      .then(() => {
+        selectedResumeRef.getDownloadURL().then((resumeDownloadURL) => {
+          setResumeUrl(resumeDownloadURL)
+          setResumeLoading(false)
+        })
+      })
+      .catch(() => {
+        setResumeLoading(false)
+        alert(
+          "Resume could not be uploaded. Please select a PDF file less than 2MB in size."
+        )
+      })
   }
 
   const validateEmail = (inputEmail) => {
@@ -132,6 +193,7 @@ export default function AddApplicant() {
         response.json()
       })
       .then((data) => {
+        history.push("/")
         alert("Applicant has been successfully added to the system")
       })
       .catch((err) => {
@@ -155,24 +217,64 @@ export default function AddApplicant() {
           autoComplete="off"
           onSubmit={handleFormSubmit}
         >
-          <label htmlFor="photoUploadInput" className={classes.photoUploadLabel}>
-            <img src={photoUrl} className={classes.currentPhoto} alt="Current applicant headshot" />
-            <Button
-              variant="contained"
-              color="primary"
-              component="span"
-              startIcon={<CloudUploadIcon />}
+          {photoLoading ? (
+            <CircularProgress />
+          ) : (
+            <label
+              htmlFor="photoUploadInput"
+              className={classes.fileUploadLabel}
             >
-              Upload Profile Photo
-            </Button>
-            <input
-              accept="image/*"
-              className={classes.uploadInput}
-              id="photoUploadInput"
-              type="file"
-              onChange={handlePhotoUpload}
-            />
-          </label>
+              <img
+                src={photoUrl}
+                className={classes.currentPhoto}
+                alt="Current applicant headhshot"
+              />
+              <Button
+                variant="contained"
+                color="primary"
+                component="span"
+                startIcon={<CloudUploadIcon />}
+              >
+                Upload Profile Photo
+              </Button>
+              <input
+                accept="image/*"
+                className={classes.uploadInput}
+                id="photoUploadInput"
+                type="file"
+                onChange={handlePhotoUpload}
+              />
+            </label>
+          )}
+          {resumeLoading ? (
+            <CircularProgress />
+          ) : (
+            <label
+              htmlFor="resumeUploadInput"
+              className={classes.fileUploadLabel}
+            >
+              {<p>{resumePath}</p>}
+              <Button
+                variant="contained"
+                color="primary"
+                component="span"
+                startIcon={<CloudUploadIcon />}
+              >
+                Upload Resume
+              </Button>
+              <input
+                accept="application/pdf"
+                className={classes.uploadInput}
+                id="resumeUploadInput"
+                type="file"
+                onChange={
+                  document.getElementById("resumeUploadInput")
+                    ? handleResumeUpload
+                    : null
+                }
+              />
+            </label>
+          )}
           <TextField
             className={classes.textInput}
             required

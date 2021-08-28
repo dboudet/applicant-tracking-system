@@ -4,9 +4,12 @@ import { firebaseConfig } from "./config"
 import { useState, useEffect } from "react"
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
 import { Container, CssBaseline, Toolbar } from "@material-ui/core"
-import { makeStyles } from "@material-ui/core/styles"
+import {
+  makeStyles,
+  createTheme,
+  ThemeProvider,
+} from "@material-ui/core/styles"
 import NavBar from "./components/NavBar"
-import SideDrawer from "./components/SideDrawer"
 import MobileApplicantList from "./screens/MobileApplicantList"
 import ApplicantTable from "./components/ApplicantTable"
 import ApplicantList from "./components/ApplicantList"
@@ -17,6 +20,15 @@ import UpdateApplicant from "./screens/UpdateApplicant"
 import Login from "./screens/Login"
 import "./App.css"
 import Home from "./screens/Home"
+import { deepPurple } from "@material-ui/core/colors"
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: deepPurple[900],
+  },
+}
+})
 
 const useStyles = makeStyles((theme) => ({
   main: {
@@ -53,60 +65,62 @@ export default function App() {
   const classes = useStyles()
 
   return (
-    <div className={classes.root}>
-      <Router>
-        <CssBaseline />
-        <NavBar user={user} setUser={setUser} />
-        <div className={classes.main}>
-          {/* <SideDrawer /> */}
-          <div className={classes.content}>
-            <Toolbar />
-            {user && (
-              <Container
-              maxWidth="lg"
-              style={{ minHeight: "70vh", paddingTop: "20px" }}
-              >
-                <Switch>
-                  <Route exact path="/applicants/update/:applicantId">
-                    <UpdateApplicant />
-                  </Route>
-                  <Route exact path="/view-applicant/:applicantId">
-                    <ViewApplicant />
-                  </Route>
-                  <Route exact path="/add-new-applicant">
-                    <AddApplicant />
-                  </Route>
-                  <Route exact path="/applicants-list-mobile">
-                    <MobileApplicantList />
-                  </Route>
-                  <Route exact path="/applicants-table">
-                    <ApplicantTable />
-                  </Route>
-                  <Route path="/applicants-list">
-                    <ApplicantList />
-                  </Route>
-                  <Route path="/login">
-                    <Login user={user} setUser={setUser} />
-                  </Route>
-                  <Route path="/*">
-                    <Home />
-                  </Route>
-                </Switch>
-              </Container>
-            )}
-            {!user && (
-              <Container maxWidth="lg" className={classes.container}>
-                <Switch>
-                  <Route path="/*">
-                    <Login user={user} setUser={setUser} />
-                  </Route>
-                </Switch>
-              </Container>
-            )}
+    <ThemeProvider theme={theme}>
+      <div className={classes.root}>
+        <Router>
+          <CssBaseline />
+          <NavBar user={user} setUser={setUser} />
+          <div className={classes.main}>
+            {/* <SideDrawer /> */}
+            <div className={classes.content}>
+              <Toolbar />
+              {user && (
+                <Container
+                  maxWidth="lg"
+                  style={{ minHeight: "70vh", paddingTop: "20px" }}
+                >
+                  <Switch>
+                    <Route exact path="/applicants/update/:applicantId">
+                      <UpdateApplicant />
+                    </Route>
+                    <Route exact path="/view-applicant/:applicantId">
+                      <ViewApplicant />
+                    </Route>
+                    <Route exact path="/add-new-applicant">
+                      <AddApplicant />
+                    </Route>
+                    <Route exact path="/applicants-list-mobile">
+                      <MobileApplicantList />
+                    </Route>
+                    <Route exact path="/applicants-table">
+                      <ApplicantTable />
+                    </Route>
+                    <Route path="/applicants-list">
+                      <ApplicantList />
+                    </Route>
+                    <Route path="/login">
+                      <Login user={user} setUser={setUser} />
+                    </Route>
+                    <Route path="/*">
+                      <Home />
+                    </Route>
+                  </Switch>
+                </Container>
+              )}
+              {!user && (
+                <Container maxWidth="lg" className={classes.container}>
+                  <Switch>
+                    <Route path="/*">
+                      <Login user={user} setUser={setUser} />
+                    </Route>
+                  </Switch>
+                </Container>
+              )}
+            </div>
           </div>
-        </div>
-        <Footer />
-      </Router>
-    </div>
+          <Footer />
+        </Router>
+      </div>
+    </ThemeProvider>
   )
 }

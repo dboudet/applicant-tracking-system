@@ -22,12 +22,6 @@ const columns = [
     field: "application_stage",
     headerName: "Application Stage",
     sortable: true,
-    width: 120,
-  },
-  {
-    field: "application_stage",
-    headerName: "Application Stage",
-    sortable: true,
     width: 200,
   },
   {
