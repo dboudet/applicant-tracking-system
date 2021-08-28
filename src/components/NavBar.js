@@ -239,7 +239,7 @@ export default function NavBar({ user, setUser }) {
             noWrap
           >
             <Link to="/" className={classes.normalizeLink}>
-              Applicant Tracking System
+              Applicant Assistant
             </Link>
           </Typography>
           {user && (

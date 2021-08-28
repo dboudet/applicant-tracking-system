@@ -1,6 +1,7 @@
 import firebase from "firebase/app"
 import "firebase/auth"
 import { firebaseConfig } from "../config"
+import bcrypt from "bcryptjs"
 
 import { useState, useEffect, useRef } from "react"
 import { useHistory } from "react-router-dom"
@@ -15,6 +16,7 @@ import {
   Paper,
   TextField,
   Typography,
+  Toolbar,
 } from "@material-ui/core"
 import Visibility from "@material-ui/icons/Visibility"
 import VisibilityOff from "@material-ui/icons/VisibilityOff"
@@ -45,6 +47,7 @@ const useStyles = makeStyles((theme) => ({
     width: "50ch",
   },
 }))
+const mySalt = "$2a$10$jVyAWaE9JAWIbzEQqx/sju"
 
 export default function Login({ user, setUser }) {
   const classes = useStyles()
@@ -56,7 +59,7 @@ export default function Login({ user, setUser }) {
   const [emailError, setEmailError] = useState(false)
   const [passwordError, setPasswordError] = useState(false)
   const timerRef = useRef()
-  
+
   useEffect(() => () => clearTimeout(timerRef.current), [])
   const handleClickShowPassword = () => setShowPassword(!showPassword)
   const handleMouseDownPassword = (event) => event.preventDefault()
@@ -69,6 +72,7 @@ export default function Login({ user, setUser }) {
 
   const handleFormSubmit = (event) => {
     event.preventDefault()
+    const hashedPassword = bcrypt.hashSync(password, mySalt)
     // if (!email || !password) {
     //   alert("Please enter your email address and password")
     //   return
@@ -79,13 +83,13 @@ export default function Login({ user, setUser }) {
     }
     firebase
       .auth()
-      .signInWithEmailAndPassword(email, password)
+      .signInWithEmailAndPassword(email, hashedPassword)
       .then((userCredential) => {
         // Signed in
         const firebaseUser = userCredential.user
         // localStorage.setItem("user", JSON.stringify(firebaseUser))
         setUser(firebaseUser)
-        console.log(firebaseUser)
+        // console.log(firebaseUser)
         history.push("/")
         alert("Welcome! You are now signed in.")
       })
@@ -99,7 +103,7 @@ export default function Login({ user, setUser }) {
       <Fade
         in={true}
         style={{
-          transitionDelay:"500ms",
+          transitionDelay: "500ms",
         }}
         unmountOnExit
       >
@@ -173,6 +177,11 @@ export default function Login({ user, setUser }) {
               Log in
             </Button>
           </form>
+          <Toolbar />
+          <video width="320" height="240" controls>
+            <source src="/video/recording-login-and-lists.mov" type="video/mov" />
+            Your browser does not support the video tag.
+          </video>
         </Paper>
       </Fade>
     </div>
