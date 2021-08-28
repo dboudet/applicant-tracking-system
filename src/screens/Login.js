@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
   },
   hero: {
     width: "100%",
-    height: 'calc(100vw * 0.2)',
+    height: "calc(100vw * 0.2)",
     backgroundImage: `url(${heroImage})`,
     backgroundPosition: "center",
     backgroundSize: "cover",
@@ -60,18 +60,17 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(4),
     padding: theme.spacing(3),
     display: "flex",
-    flexDirection:"column",
+    flexDirection: "column",
     alignItems: "center",
     textAlign: "center",
     "& > h6": {
-      margin: theme.spacing(4,0,1,0),
+      margin: theme.spacing(4, 0, 1, 0),
     },
     "& > img": {
       maxWidth: "94%",
     },
   },
-  demoContent: {
-  }
+  demoContent: {},
 }))
 const mySalt = "$2a$10$jVyAWaE9JAWIbzEQqx/sju"
 
@@ -211,12 +210,13 @@ export default function Login({ user, setUser }) {
           </form>
         </Paper>
         <Paper className={classes.demoArea}>
-          <Typography variant="h5" style={{maxWidth:"760px"}}>
-            Below, you'll find a preview of my applicant tracking system. <br />To
-            request a login for demo access, please contact me at
+          <Typography variant="h5" style={{ maxWidth: "760px" }}>
+            Below, you'll find a preview of my applicant tracking system. <br />
+            To request a login for demo access, please contact me at 
             <a
               href="mailto:dboudet04@gmail.com?subject=Applicant%20Assistant%20Access%20Request"
               target="_blank"
+              style={{marginLeft:"5px"}}
             >
               dboudet04@gmail.com
             </a>
