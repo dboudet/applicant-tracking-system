@@ -20,12 +20,12 @@ import UpdateApplicant from "./screens/UpdateApplicant"
 import Login from "./screens/Login"
 import "./App.css"
 import Home from "./screens/Home"
-import { deepPurple } from "@material-ui/core/colors"
+import { teal } from "@material-ui/core/colors"
 
 const theme = createTheme({
   palette: {
     primary: {
-      main: deepPurple[900],
+      main: teal[800],
   },
 }
 })
@@ -108,7 +108,7 @@ export default function App() {
                 </Container>
               )}
               {!user && (
-                <Container maxWidth="lg" className={classes.container}>
+                <Container className={classes.container}>
                   <Switch>
                     <Route path="/*">
                       <Login user={user} setUser={setUser} />

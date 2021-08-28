@@ -1,7 +1,7 @@
 import firebase from "firebase"
 import "firebase/auth"
 import { firebaseConfig } from "../config"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { Link, useHistory } from "react-router-dom"
 import { alpha, makeStyles } from "@material-ui/core/styles"
 import {
@@ -17,6 +17,7 @@ import {
 import Autocomplete from "@material-ui/lab/Autocomplete"
 import SearchIcon from "@material-ui/icons/Search"
 import AccountCircle from "@material-ui/icons/AccountCircle"
+import SupervisedUserCircleOutlinedIcon from "@material-ui/icons/SupervisedUserCircleOutlined"
 
 const useStyles = makeStyles((theme) => ({
   // appBar: {
@@ -28,11 +29,12 @@ const useStyles = makeStyles((theme) => ({
   menuButton: {
     marginRight: theme.spacing(2),
   },
-  title: {
-    display: "none",
-    [theme.breakpoints.up("sm")]: {
-      display: "block",
-    },
+  titleLink: {
+    display: "flex",
+    alignItems: "center",
+    letterSpacing: "1px",
+    color: "inherit",
+    textDecoration: "none",
   },
   normalizeLink: {
     color: "inherit",
@@ -232,14 +234,10 @@ export default function NavBar({ user, setUser }) {
               </Link>
             </MenuItem>
           </Menu>} */}
-          <Typography
-            className={classes.title}
-            variant="h6"
-            component="h1"
-            noWrap
-          >
-            <Link to="/" className={classes.normalizeLink}>
-              Applicant Assistant
+          <Typography variant="h6" component="h1" noWrap>
+            <Link to="/" className={classes.titleLink}>
+              <SupervisedUserCircleOutlinedIcon />
+              &nbsp;Applicant Assistant
             </Link>
           </Typography>
           {user && (
@@ -293,7 +291,11 @@ export default function NavBar({ user, setUser }) {
           <div className={classes.sectionDesktop}>
             {!user && (
               <Link to="/" className={classes.normalizeLink}>
-                <Button onClick={handleLogout} startIcon={<AccountCircle />} className={classes.normalizeLink}>
+                <Button
+                  onClick={handleLogout}
+                  startIcon={<AccountCircle />}
+                  className={classes.normalizeLink}
+                >
                   Log in
                 </Button>
               </Link>

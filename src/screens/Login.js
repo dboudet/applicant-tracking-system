@@ -2,7 +2,6 @@ import firebase from "firebase/app"
 import "firebase/auth"
 import { firebaseConfig } from "../config"
 import bcrypt from "bcryptjs"
-
 import { useState, useEffect, useRef } from "react"
 import { useHistory } from "react-router-dom"
 import {
@@ -16,22 +15,32 @@ import {
   Paper,
   TextField,
   Typography,
-  Toolbar,
 } from "@material-ui/core"
 import Visibility from "@material-ui/icons/Visibility"
 import VisibilityOff from "@material-ui/icons/VisibilityOff"
 import { makeStyles } from "@material-ui/core/styles"
+import heroImage from "../static/applicant-assistant-hero-2.jpg"
+import LoginConfirmation from "../components/LoginConfirmation"
 
 const useStyles = makeStyles((theme) => ({
-  //   root: {
-  //     display: "flex",
-  //     flexDirection: "column",
-  //     alignItems: "center",
-  //     justifyContent: "center",
-  //   },
-  paper: {
-    minWidth: "60ch",
+  root: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
+  },
+  hero: {
+    width: "100%",
+    height: 'calc(100vw * 0.2)',
+    backgroundImage: `url(${heroImage})`,
+    backgroundPosition: "center",
+    backgroundSize: "cover",
+  },
+  formContainer: {
+    width: "60ch",
     maxWidth: "90vw",
+    margin: theme.spacing(4),
   },
   loginForm: {
     "& > *": {
@@ -45,7 +54,24 @@ const useStyles = makeStyles((theme) => ({
   },
   textInput: {
     width: "50ch",
+    maxWidth: "95%",
   },
+  demoArea: {
+    margin: theme.spacing(4),
+    padding: theme.spacing(3),
+    display: "flex",
+    flexDirection:"column",
+    alignItems: "center",
+    textAlign: "center",
+    "& > h6": {
+      margin: theme.spacing(4,0,1,0),
+    },
+    "& > img": {
+      maxWidth: "94%",
+    },
+  },
+  demoContent: {
+  }
 }))
 const mySalt = "$2a$10$jVyAWaE9JAWIbzEQqx/sju"
 
@@ -59,6 +85,7 @@ export default function Login({ user, setUser }) {
   const [emailError, setEmailError] = useState(false)
   const [passwordError, setPasswordError] = useState(false)
   const timerRef = useRef()
+  const [dialogOpen, setDialogOpen] = useState(false)
 
   useEffect(() => () => clearTimeout(timerRef.current), [])
   const handleClickShowPassword = () => setShowPassword(!showPassword)
@@ -91,23 +118,28 @@ export default function Login({ user, setUser }) {
         setUser(firebaseUser)
         // console.log(firebaseUser)
         history.push("/")
-        alert("Welcome! You are now signed in.")
+        setDialogOpen(true)
+        // alert("Welcome! You are now signed in.")
       })
       .catch((err) => {
         alert(err)
       })
   }
 
+  const handleDialogClose = () => setDialogOpen(false)
+
   return (
-    <div className={classes.root}>
-      <Fade
-        in={true}
-        style={{
-          transitionDelay: "500ms",
-        }}
-        unmountOnExit
-      >
-        <Paper className={classes.paper}>
+    <Fade
+      in={true}
+      style={{
+        transitionDelay: "500ms",
+      }}
+      unmountOnExit
+    >
+      <div className={classes.root}>
+        <LoginConfirmation open={dialogOpen} onClose={handleDialogClose} />
+        <div className={classes.hero}></div>
+        <Paper className={classes.formContainer}>
           <Typography
             variant="h5"
             style={{ textAlign: "center", paddingTop: 20 }}
@@ -177,13 +209,41 @@ export default function Login({ user, setUser }) {
               Log in
             </Button>
           </form>
-          <Toolbar />
-          <video width="320" height="240" controls>
-            <source src="/video/recording-login-and-lists.mov" type="video/mov" />
-            Your browser does not support the video tag.
-          </video>
         </Paper>
-      </Fade>
-    </div>
+        <Paper className={classes.demoArea}>
+          <Typography variant="h5" style={{maxWidth:"760px"}}>
+            Below, you'll find a preview of my applicant tracking system. <br />To
+            request a login for demo access, please contact me at
+            <a
+              href="mailto:dboudet04@gmail.com?subject=Applicant%20Assistant%20Access%20Request"
+              target="_blank"
+            >
+              dboudet04@gmail.com
+            </a>
+            .
+          </Typography>
+          <Typography variant="h6">Multiple List Views</Typography>
+          <img
+            src={process.env.PUBLIC_URL + "/ats-demo-lists.gif"}
+            alt="List and card applicant views"
+          />
+          <Typography variant="h6">Update Applicants' Progress</Typography>
+          <img
+            src={process.env.PUBLIC_URL + "/ats-demo-update.gif"}
+            alt="Login and applicant list views"
+          />
+          <Typography variant="h6">Easily Add New Candidates</Typography>
+          <img
+            src={process.env.PUBLIC_URL + "/ats-demo-add.gif"}
+            alt="Login and applicant list views"
+          />
+          <Typography variant="h6">Find Applicants by Name</Typography>
+          <img
+            src={process.env.PUBLIC_URL + "/ats-demo-search.gif"}
+            alt="Login and applicant list views"
+          />
+        </Paper>
+      </div>
+    </Fade>
   )
 }

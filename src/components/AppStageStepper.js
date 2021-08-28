@@ -36,12 +36,12 @@ export default function AppStageStepper({application_stage, setNewApplicationSta
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1)
-    setNewApplicationStage(activeStep)
+    setNewApplicationStage(activeStep + 1)
   }
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1)
-    setNewApplicationStage(activeStep)
+    setNewApplicationStage(activeStep - 1)
   }
 
   const handleReset = () => {
