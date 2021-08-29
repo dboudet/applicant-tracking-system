@@ -9,7 +9,7 @@ The app is currently deployed to AWS, but a login is required:
 Below you can find screen recordings demonstrating the available functionality (these are also available at the website below).
 
 ### Multiple List Views
-<img src="http://dboudet-ats.s3-website-us-east-1.amazonaws.com/ats-demo-lists.gif" alt="List and card applicant views">
+<img src="http://dboudet-ats.s3-website-us-east-1.amazonaws.com/ats-demo-lists.gif" alt="List and card applicant views" />
 
 ### Update Applicants' Progress
 <img src="http://dboudet-ats.s3-website-us-east-1.amazonaws.com/ats-demo-update.gif" alt="List and card applicant views" />
