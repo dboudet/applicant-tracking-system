@@ -9,13 +9,13 @@ The app is currently deployed to AWS, but a login is required:
 Below you can find screen recordings demonstrating the available functionality (these are also available at the website below).
 
 ### Multiple List Views
-<img src="http://dboudet-ats.s3-website-us-east-1.amazonaws.com/ats-demo-lists.gif" alt="List and card applicant views" />
+![List and card applicant views](./public/ats-demo-lists.gif)
 
 ### Update Applicants' Progress
-<img src="http://dboudet-ats.s3-website-us-east-1.amazonaws.com/ats-demo-update.gif" alt="List and card applicant views" />
+![Update applicant progress](./public/ats-demo-update.gif)
 
 ### Easily Add New Candidates
-<img src="http://dboudet-ats.s3-website-us-east-1.amazonaws.com/ats-demo-add.gif" alt="List and card applicant views" />
+![Add new candidates](./public/ats-demo-add.gif)
 
 ### Find Applicants by Name
-<img src="http://dboudet-ats.s3-website-us-east-1.amazonaws.com/ats-demo-search.gif" alt="List and card applicant views" />
+![Find applicants by name](./public/ats-demo-search.gif)
