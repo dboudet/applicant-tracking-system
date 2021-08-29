@@ -64,7 +64,7 @@ export default function ApplicantList() {
           <List>
             {applicants?.map((applicant) => {
               return (
-                <ListItem key={applicant.id} style={{ overflow: "scroll" }}>
+                <ListItem key={applicant.id}>
                   <ListItemAvatar>
                     <Avatar className={classes.large}>
                       <ApplicantPhoto
