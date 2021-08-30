@@ -188,12 +188,21 @@ export default function NavBar({ user, setUser }) {
   )
 
   const populateSearchOptions = () => {
-    fetch(`${process.env.REACT_APP_API_ENDPOINT}/ats/applicants`)
-      .then((response) => response.json())
-      .then((data) => {
-        setApplicantSearchResults(data)
-      })
-      .catch((err) => console.error(err))
+    if (searchQuery !== "") {
+      fetch(`${process.env.REACT_APP_API_ENDPOINT}/ats/search/${searchQuery}`)
+        .then((response) => response.json())
+        .then((data) => {
+          setApplicantSearchResults(data)
+        })
+        .catch((err) => console.error(err))
+    } else {
+      fetch(`${process.env.REACT_APP_API_ENDPOINT}/ats/applicants`)
+        .then((response) => response.json())
+        .then((data) => {
+          setApplicantSearchResults(data)
+        })
+        .catch((err) => console.error(err))
+    }
   }
 
   // useEffect(() => {
@@ -209,31 +218,6 @@ export default function NavBar({ user, setUser }) {
     <div className={classes.grow}>
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
-          {/* {user && <IconButton
-            edge="start"
-            className={classes.menuButton}
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleClick}
-          >
-            <MenuIcon />
-          </IconButton>}
-          {user && <Menu
-            id="main-nav-menu"
-            anchorEl={primaryAnchorEl}
-            keepMounted
-            open={Boolean(primaryAnchorEl)}
-            onClose={handleClose}
-          >
-            <MenuItem onClick={handleClose}>
-              <Link
-                to="/add-new-applicant"
-                className={classes.normalizeLink}
-              >
-                Add Applicant
-              </Link>
-            </MenuItem>
-          </Menu>} */}
           <Typography variant="h6" component="h1" noWrap>
             <Link to="/" className={classes.titleLink}>
               <SupervisedUserCircleOutlinedIcon />
@@ -247,30 +231,37 @@ export default function NavBar({ user, setUser }) {
               </div>
               <Autocomplete
                 id="applicant-search"
-                clearOnBlur={true}
+                className={classes.inputRoot}
                 clearOnEscape={true}
-                noOptionsText="Start typing..."
+                noOptionsText="No results found..."
+                autoSelect={true}
+                // selectOnFocus={true}
                 options={applicantSearchResults}
                 getOptionLabel={(applicant) => {
                   setSelectedApplicant(applicant.id)
                   return `${applicant.first_name} ${applicant.last_name}`
                 }}
-                getOptionSelected={(event) => {
-                  // console.log(selectedApplicant)
-                  history.push(`/view-applicant/${selectedApplicant}`)
-                }}
-                className={classes.inputRoot}
-                onClose={() => history.push("/")}
                 renderInput={(params) => (
                   <TextField
                     {...params}
                     placeholder="Search applicants by name"
                     onFocus={populateSearchOptions}
-                    onBlur={(event) => setSearchQuery("")}
-                    onChange={(event) =>
-                      setSearchQuery(
-                        event.target.value.replace(/[^a-zA-Z0-9]/g, "")
-                      )
+                    onBlur={(event) =>
+                      searchQuery
+                        ? setSearchQuery(
+                            event.target.value.replace(/[^a-zA-Z0-9]/g, "")
+                          )
+                        : setSearchQuery("")
+                    }
+                    onChange={(event) => {
+                      searchQuery
+                        ? setSearchQuery(
+                            event.target.value.replace(/[^a-zA-Z0-9]/g, "")
+                          )
+                        : setSearchQuery("")
+                    }}
+                    onSelect={() => 
+                      !selectedApplicant ? history.push("/") : history.push(`/view-applicant/${selectedApplicant}`)
                     }
                     className={classes.inputInput}
                   />

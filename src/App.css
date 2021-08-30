@@ -17,11 +17,15 @@ body {
   background: #fff;
 }
 input#applicant-search::placeholder {
-  color:#FFFFFF;
+  color: #ffffff;
 }
 
 footer,
 footer a {
   background-color: var(--darkgray);
   color: #ffffff;
+}
+
+.MuiStepIcon-root.MuiStepIcon-completed {
+  color: rgba(0, 105, 92, 0.3) !important;
 }
