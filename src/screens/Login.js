@@ -216,6 +216,7 @@ export default function Login({ user, setUser }) {
             <a
               href="mailto:dboudet04@gmail.com?subject=Applicant%20Assistant%20Access%20Request"
               target="_blank"
+              rel="noreferrer"
               style={{marginLeft:"5px"}}
             >
               dboudet04@gmail.com

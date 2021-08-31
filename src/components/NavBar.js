@@ -235,7 +235,7 @@ export default function NavBar({ user, setUser }) {
                 clearOnEscape={true}
                 noOptionsText="No results found..."
                 autoSelect={true}
-                // selectOnFocus={true}
+                selectOnFocus={true}
                 options={applicantSearchResults}
                 getOptionLabel={(applicant) => {
                   setSelectedApplicant(applicant.id)
