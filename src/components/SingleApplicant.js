@@ -38,9 +38,9 @@ export default function SingleApplicant({ applicant }) {
         <Typography
           variant="h5"
           component="h2"
-        >{`${applicant.first_name} ${applicant.last_name}`}</Typography>
+        >{`${applicant?.first_name} ${applicant?.last_name}`}</Typography>
         <Typography variant="subtitle2" style={{ margin: "6px 0 20px 0" }}>
-          {applicant.email}
+          {applicant?.email}
         </Typography>
         <Link
           href={`/applicants/update/${applicant.id}`}
@@ -53,7 +53,7 @@ export default function SingleApplicant({ applicant }) {
         </Link>
       </Grid>
       <Grid item xs={12} md={8} className={classes.gridColumn}>
-        <Typography variant="h6">{applicant.position}</Typography>
+        <Typography variant="h6">{applicant?.position}</Typography>
         <AppStageSepperReadOnly
           application_stage={applicant.application_stage}
         />
