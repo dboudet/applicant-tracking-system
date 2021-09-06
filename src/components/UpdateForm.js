@@ -80,9 +80,9 @@ export default function UpdateForm(props) {
   const [resumeLoading, setResumeLoading] = useState(false)
 
   useEffect(() => {
-    let findPathStart = newResumeUrl?.search(/(?<=\%2Fresumes\%2F)/)
-    let findPathEnd = newResumeUrl?.search(/(?<=\.pdf)/)
-     setResumePath(newResumeUrl?.substring(findPathStart,findPathEnd))
+    let findPathStart = newResumeUrl?.search("%2Fresumes%2F")
+    let findPathEnd = newResumeUrl?.search(".pdf?")
+     setResumePath(newResumeUrl?.substring((findPathStart+13),(findPathEnd+4)))
     }, [])
   
   
