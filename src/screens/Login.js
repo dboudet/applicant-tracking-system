@@ -138,18 +138,6 @@ export default function Login({ user, setUser }) {
       <div className={classes.root}>
         <LoginConfirmation open={dialogOpen} onClose={handleDialogClose} />
         <div className={classes.hero}></div>
-        <Typography variant="h5" style={{ maxWidth: "760px" }}>
-            Demo screenshots of my applicant tracking system can be found below. To request a login, please contact me at 
-            <a
-              href="mailto:dboudet04@gmail.com?subject=Applicant%20Assistant%20Access%20Request"
-              target="_blank"
-              rel="noreferrer"
-              style={{marginLeft:"5px"}}
-            >
-              dboudet04@gmail.com
-            </a>
-            .
-          </Typography>
         <Paper className={classes.formContainer}>
           <Typography
             variant="h5"
@@ -215,13 +203,26 @@ export default function Login({ user, setUser }) {
               variant="contained"
               color="primary"
               size="large"
-              disabled={!email || !password ? true : false}
+              disabled={email === false || password === false ? true : false}
             >
               Log in
             </Button>
           </form>
         </Paper>
         <Paper className={classes.demoArea}>
+          <Typography variant="h5" style={{ maxWidth: "760px" }}>
+            Below, you'll find a preview of my applicant tracking system. <br />
+            To request a login for demo access, please contact me at 
+            <a
+              href="mailto:dboudet04@gmail.com?subject=Applicant%20Assistant%20Access%20Request"
+              target="_blank"
+              rel="noreferrer"
+              style={{marginLeft:"5px"}}
+            >
+              dboudet04@gmail.com
+            </a>
+            .
+          </Typography>
           <Typography variant="h6">Multiple List Views</Typography>
           <img
             src={process.env.PUBLIC_URL + "/ats-demo-lists.gif"}
