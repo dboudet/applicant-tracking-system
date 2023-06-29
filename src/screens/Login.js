@@ -20,6 +20,7 @@ import Visibility from "@material-ui/icons/Visibility"
 import VisibilityOff from "@material-ui/icons/VisibilityOff"
 import { makeStyles } from "@material-ui/core/styles"
 import heroImage from "../static/applicant-assistant-hero-2.jpg"
+import demoLogin from "../../public/demo-login.png"
 import LoginConfirmation from "../components/LoginConfirmation"
 
 const useStyles = makeStyles((theme) => ({
@@ -211,17 +212,11 @@ export default function Login({ user, setUser }) {
         </Paper>
         <Paper className={classes.demoArea}>
           <Typography variant="h5" style={{ maxWidth: "760px" }}>
-            Below, you'll find a preview of my applicant tracking system. <br />
-            To request a login for demo access, please contact me at 
-            <a
-              href="mailto:dboudet04@gmail.com?subject=Applicant%20Assistant%20Access%20Request"
-              target="_blank"
-              rel="noreferrer"
-              style={{marginLeft:"5px"}}
-            >
-              dboudet04@gmail.com
-            </a>
-            .
+            <p>Below, you'll find a preview of my applicant tracking system, along with a demo login if you'd like try it out.</p>
+            <img
+              src={demoLogin}
+              alt="demo user"
+            />
           </Typography>
           <Typography variant="h6">Multiple List Views</Typography>
           <img
