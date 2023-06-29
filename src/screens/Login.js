@@ -20,7 +20,7 @@ import Visibility from "@material-ui/icons/Visibility"
 import VisibilityOff from "@material-ui/icons/VisibilityOff"
 import { makeStyles } from "@material-ui/core/styles"
 import heroImage from "../static/applicant-assistant-hero-2.jpg"
-import demoLogin from "../../public/demo-login.png"
+import demoLogin from "../static/demo-login.png"
 import LoginConfirmation from "../components/LoginConfirmation"
 
 const useStyles = makeStyles((theme) => ({
