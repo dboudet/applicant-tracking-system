@@ -1,12 +1,13 @@
 # Applicant Assistant
 
-This is a fully functional easy-to-use applicant tracking system, built on React. Meant to serve small businesses, nonprofits, or anyone who just needs a simple way to track and organize incoming job applicants. *It could also be easily adapted for any decision process that involves selecting from multiple applicants, such as (RFPs).
+This is a very simple, but fully functional applicant tracking system, built on React. Meant to serve small businesses, nonprofits, or anyone who just needs a simple way to track and organize incoming job applicants. *It could also be easily adapted for any decision process that involves selecting from multiple applicants, such as (RFPs).
 
-The app is currently deployed to AWS, but a login is required:
+**_*This was developed over a two-week period as a course project. It is functional, but only really intended for personal/educational use._**
+
+A demo can be found here:
 [http://dboudet-ats.s3-website-us-east-1.amazonaws.com/](http://dboudet-ats.s3-website-us-east-1.amazonaws.com/)
 
-## Demo
-Below you can find screen recordings demonstrating the available functionality (these are also available at the website below).
+Below you can find screen recordings demonstrating the available functionality:
 
 ### Multiple List Views
 ![List and card applicant views](./public/ats-demo-lists.gif)
