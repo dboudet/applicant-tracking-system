@@ -100,6 +100,7 @@ export default function Login({ user, setUser }) {
   const handleFormSubmit = (event) => {
     event.preventDefault()
     const hashedPassword = bcrypt.hashSync(password, mySalt)
+    // password must be hashed when adding to Firebase
     // if (!email || !password) {
     //   alert("Please enter your email address and password")
     //   return
